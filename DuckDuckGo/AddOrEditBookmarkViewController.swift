@@ -23,11 +23,13 @@ import CoreData
 import Bookmarks
 import Persistence
 import Combine
+import DDGSync
 import WidgetKit
 
 protocol AddOrEditBookmarkViewControllerDelegate: AnyObject {
 
     func finishedEditing(_: AddOrEditBookmarkViewController, entityID: NSManagedObjectID)
+    func deleteBookmark(_: AddOrEditBookmarkViewController, entityID: NSManagedObjectID)
 
 }
 
@@ -38,27 +40,41 @@ class AddOrEditBookmarkViewController: UIViewController {
     private var foldersViewController: BookmarkFoldersViewController?
     private let viewModel: BookmarkEditorViewModel
     private let bookmarksDatabase: CoreDataDatabase
+    private let syncService: DDGSyncing
+    private let appSettings: AppSettings
 
     private var viewModelCancellable: AnyCancellable?
 
     init?(coder: NSCoder,
           editingEntityID: NSManagedObjectID,
-          bookmarksDatabase: CoreDataDatabase) {
+          bookmarksDatabase: CoreDataDatabase,
+          syncService: DDGSyncing,
+          appSettings: AppSettings) {
         
         self.bookmarksDatabase = bookmarksDatabase
         self.viewModel = BookmarkEditorViewModel(editingEntityID: editingEntityID,
-                                                 bookmarksDatabase: bookmarksDatabase)
+                                                 bookmarksDatabase: bookmarksDatabase,
+                                                 favoritesDisplayMode: appSettings.favoritesDisplayMode,
+                                                 syncService: syncService)
+        self.syncService = syncService
+        self.appSettings = appSettings
 
         super.init(coder: coder)
     }
     
     init?(coder: NSCoder,
           parentFolderID: NSManagedObjectID?,
-          bookmarksDatabase: CoreDataDatabase) {
-        
+          bookmarksDatabase: CoreDataDatabase,
+          syncService: DDGSyncing,
+          appSettings: AppSettings) {
+
         self.bookmarksDatabase = bookmarksDatabase
         self.viewModel = BookmarkEditorViewModel(creatingFolderWithParentID: parentFolderID,
-                                                 bookmarksDatabase: bookmarksDatabase)
+                                                 bookmarksDatabase: bookmarksDatabase,
+                                                 favoritesDisplayMode: appSettings.favoritesDisplayMode,
+                                                 syncService: syncService)
+        self.syncService = syncService
+        self.appSettings = appSettings
 
         super.init(coder: coder)
     }
@@ -121,12 +137,17 @@ class AddOrEditBookmarkViewController: UIViewController {
         WidgetCenter.shared.reloadAllTimelines()
         self.delegate?.finishedEditing(self, entityID: viewModel.bookmark.objectID)
         dismiss(animated: true, completion: nil)
+        syncService.scheduler.notifyDataChanged()
     }
 
     @IBSegueAction func onCreateEditor(_ coder: NSCoder, sender: Any?, segueIdentifier: String?) -> AddOrEditBookmarkViewController? {
-        guard let controller = AddOrEditBookmarkViewController(coder: coder,
-                                                               parentFolderID: viewModel.bookmark.parent?.objectID,
-                                                               bookmarksDatabase: bookmarksDatabase) else {
+        guard let controller = AddOrEditBookmarkViewController(
+            coder: coder,
+            parentFolderID: viewModel.bookmark.parent?.objectID,
+            bookmarksDatabase: bookmarksDatabase,
+            syncService: syncService,
+            appSettings: appSettings
+        ) else {
             fatalError("Failed to create controller")
         }
         controller.delegate = self
@@ -150,6 +171,11 @@ extension AddOrEditBookmarkViewController: BookmarkFoldersViewControllerDelegate
         performSegue(withIdentifier: "AddFolder", sender: nil)
     }
 
+    func deleteBookmark(_ controller: BookmarkFoldersViewController) {
+        self.delegate?.deleteBookmark(self, entityID: viewModel.bookmark.objectID)
+        dismiss(animated: true, completion: nil)
+    }
+
 }
 
 extension AddOrEditBookmarkViewController: AddOrEditBookmarkViewControllerDelegate {
@@ -157,6 +183,10 @@ extension AddOrEditBookmarkViewController: AddOrEditBookmarkViewControllerDelega
     func finishedEditing(_ controller: AddOrEditBookmarkViewController, entityID: NSManagedObjectID) {
         viewModel.setParentWithID(entityID)
         foldersViewController?.refresh()
+    }
+
+    func deleteBookmark(_: AddOrEditBookmarkViewController, entityID: NSManagedObjectID) {
+        self.delegate?.deleteBookmark(self, entityID: entityID)
     }
 
 }

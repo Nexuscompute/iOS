@@ -22,17 +22,21 @@ import UIKit
 
 public protocol SyncManagementViewModelDelegate: AnyObject {
 
-    func showSyncSetup()
     func showRecoverData()
     func showSyncWithAnotherDevice()
-    func showDeviceConnected()
     func showRecoveryPDF()
-    func createAccountAndStartSyncing()
+    func shareRecoveryPDF()
+    func createAccountAndStartSyncing(optionsViewModel: SyncSettingsViewModel)
     func confirmAndDisableSync() async -> Bool
     func confirmAndDeleteAllData() async -> Bool
     func copyCode()
     func confirmRemoveDevice(_ device: SyncSettingsViewModel.Device) async -> Bool
-
+    func removeDevice(_ device: SyncSettingsViewModel.Device)
+    func updateDeviceName(_ name: String)
+    func refreshDevices(clearDevices: Bool)
+    func updateOptions()
+    func launchBookmarksViewController()
+    func launchAutofillViewController()
 }
 
 public class SyncSettingsViewModel: ObservableObject {
@@ -62,21 +66,27 @@ public class SyncSettingsViewModel: ObservableObject {
         case valid
     }
 
-    @Published public var isSyncEnabled = false
-    @Published var isBusy = false
-    @Published var devices = [Device]()
-    @Published var recoveryCode = ""
+    @Published public var isSyncEnabled = false {
+        didSet {
+            if !isSyncEnabled {
+                devices = []
+            }
+        }
+    }
 
-    var setupFinishedState: TurnOnSyncViewModel.Result?
+    @Published public var devices = [Device]()
+    @Published public var isFaviconsFetchingEnabled = false
+    @Published public var isUnifiedFavoritesEnabled = true
+    @Published public var isSyncingDevices = false
+    @Published public var isSyncBookmarksPaused = false
+    @Published public var isSyncCredentialsPaused = false
+
+    @Published var isBusy = false
+    @Published var recoveryCode = ""
 
     public weak var delegate: SyncManagementViewModelDelegate?
 
     public init() { }
-
-    func enableSync() {
-        isBusy = true
-        delegate!.showSyncSetup()
-    }
 
     func disableSync() {
         isBusy = true
@@ -103,7 +113,7 @@ public class SyncSettingsViewModel: ObservableObject {
     }
 
     func saveRecoveryPDF() {
-        delegate?.showRecoveryPDF()
+        delegate?.shareRecoveryPDF()
     }
 
     func scanQRCode() {
@@ -111,63 +121,37 @@ public class SyncSettingsViewModel: ObservableObject {
     }
 
     func createEditDeviceModel(_ device: Device) -> EditDeviceViewModel {
-        return EditDeviceViewModel(device: device) { newValue in
-
-            self.devices = self.devices.map {
-                if $0.id == newValue.id {
-                    return newValue
-                }
-                return $0
-            }
-
-        } remove: { @MainActor in
-            if await self.delegate?.confirmRemoveDevice(device) == true {
-                self.devices = self.devices.filter { $0.id != device.id }
-                return true
-            }
-            return false
+        return EditDeviceViewModel(device: device) { [weak self] newValue in
+            self?.delegate?.updateDeviceName(newValue.name)
         }
     }
 
-    // MARK: Called by the view controller
+    func createRemoveDeviceModel(_ device: Device) -> RemoveDeviceViewModel {
+        return RemoveDeviceViewModel(device: device) { [weak self] device in
+            self?.delegate?.removeDevice(device)
+        }
+    }
 
     public func syncEnabled(recoveryCode: String) {
         isBusy = false
         isSyncEnabled = true
         self.recoveryCode = recoveryCode
-        devices = [
-            Device(id: UUID().uuidString, name: UIDevice.current.name, type: "phone", isThisDevice: true)
-        ]
     }
 
-    public func appendDevice(_ device: Device) {
-        devices.append(device)
-        objectWillChange.send()
+    public func startSyncPressed() {
+        isBusy = true
+        delegate?.createAccountAndStartSyncing(optionsViewModel: self)
     }
 
-    public func setupFinished(_ model: TurnOnSyncViewModel) {
-        setupFinishedState = model.state
-        switch model.state {
-        case .turnOn:
-            delegate?.createAccountAndStartSyncing()
-
-        case .syncWithAnotherDevice:
-            delegate?.showSyncWithAnotherDevice()
-
-        case .recoverData:
-            delegate?.showRecoverData()
-
-        default:
-            isBusy = false
-        }
+    public func manageBookmarks() {
+        delegate?.launchBookmarksViewController()
     }
 
-    public func codeCollectionCancelled() {
-        if setupFinishedState == .syncWithAnotherDevice {
-            delegate?.createAccountAndStartSyncing()
-        } else {
-            isBusy = false
-        }
+    public func manageLogins() {
+        delegate?.launchAutofillViewController()
     }
 
+    public func recoverSyncDataPressed() {
+        delegate?.showRecoverData()
+    }
 }

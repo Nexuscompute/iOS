@@ -24,6 +24,7 @@ public struct TestWaitlist: Waitlist {
     public static var shared: TestWaitlist = .init(store: MockWaitlistStorage(), request: MockWaitlistRequest.failure())
 
     public var isAvailable: Bool = true
+    public var isWaitlistRemoved: Bool = false
     public var waitlistStorage: WaitlistStorage
     public var waitlistRequest: WaitlistRequest
 
@@ -38,11 +39,10 @@ public struct TestWaitlist: Waitlist {
     public static var identifier: String = "mockIdentifier"
     public static var apiProductName: String = "mockApiProductName"
     public static var downloadURL: URL = URL(string: "https://duckduckgo.com")!
-    public static var isWaitlistRemoved: Bool = false
     public static var backgroundTaskName: String = "BG Task"
 
     public static var backgroundRefreshTaskIdentifier: String = "bgtask"
-    public static var notificationIdentitier: String = "notification"
+    public static var notificationIdentifier: String = "notification"
     public static var inviteAvailableNotificationTitle: String = "Title"
     public static var inviteAvailableNotificationBody: String = "Body"
 }

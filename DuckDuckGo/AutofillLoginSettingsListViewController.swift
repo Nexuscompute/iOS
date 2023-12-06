@@ -22,10 +22,10 @@ import Combine
 import Core
 import BrowserServicesKit
 import Common
-import os.log
+import DDGSync
+import DesignResourcesKit
 
-// swiftlint:disable file_length
-// swiftlint:disable type_body_length
+// swiftlint:disable file_length type_body_length
 
 protocol AutofillLoginSettingsListViewControllerDelegate: AnyObject {
     func autofillLoginSettingsListViewControllerDidFinish(_ controller: AutofillLoginSettingsListViewController)
@@ -38,15 +38,22 @@ final class AutofillLoginSettingsListViewController: UIViewController {
     }
 
     weak var delegate: AutofillLoginSettingsListViewControllerDelegate?
+    weak var detailsViewController: AutofillLoginDetailsViewController?
     private let viewModel: AutofillLoginListViewModel
-    private let emptyView = AutofillItemsEmptyView()
+    private lazy var emptyView = AutofillItemsEmptyView()
     private let lockedView = AutofillItemsLockedView()
+    private let enableAutofillFooterView = AutofillSettingsEnableFooterView()
     private let emptySearchView = AutofillEmptySearchView()
     private let noAuthAvailableView = AutofillNoAuthAvailableView()
-    private let tld: TLD = TLD()
+    private let tld: TLD = AppDependencyProvider.shared.storageCache.tld
+    private let syncService: DDGSyncing
+    private var syncUpdatesCancellable: AnyCancellable?
 
     private lazy var addBarButtonItem: UIBarButtonItem = {
-        UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed))
+        UIBarButtonItem(image: UIImage(named: "Add-24"),
+                        style: .plain,
+                        target: self,
+                        action: #selector(addButtonPressed))
     }()
     
     private var cancellables: Set<AnyCancellable> = []
@@ -67,10 +74,12 @@ final class AutofillLoginSettingsListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 60
+        tableView.estimatedSectionFooterHeight = 40
         tableView.registerCell(ofType: AutofillListItemTableViewCell.self)
         tableView.registerCell(ofType: EnableAutofillSettingsTableViewCell.self)
+        tableView.registerCell(ofType: AutofillNeverSavedTableViewCell.self)
         // Have to set tableHeaderView height otherwise tableView content will jump when adding / removing searchController due to tableView insetGrouped style
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 16))
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 24))
         return tableView
     }()
 
@@ -94,13 +103,28 @@ final class AutofillLoginSettingsListViewController: UIViewController {
                            constant: (tableView.frame.height / 2))
     }()
 
-    init(appSettings: AppSettings, currentTabUrl: URL? = nil) {
-        let secureVault = try? SecureVaultFactory.default.makeVault(errorReporter: SecureVaultErrorReporter.shared)
+    init(appSettings: AppSettings, currentTabUrl: URL? = nil, syncService: DDGSyncing, syncDataProviders: SyncDataProviders) {
+        let secureVault = try? AutofillSecureVaultFactory.makeVault(errorReporter: SecureVaultErrorReporter.shared)
         if secureVault == nil {
             os_log("Failed to make vault")
         }
         self.viewModel = AutofillLoginListViewModel(appSettings: appSettings, tld: tld, secureVault: secureVault, currentTabUrl: currentTabUrl)
+        self.syncService = syncService
         super.init(nibName: nil, bundle: nil)
+
+        syncUpdatesCancellable = syncDataProviders.credentialsAdapter.syncDidCompletePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.viewModel.updateData()
+                self?.tableView.reloadData()
+                if let detailsViewController = self?.detailsViewController, let accountId = detailsViewController.account?.id.flatMap(Int64.init) {
+                    do {
+                        detailsViewController.account = try secureVault?.websiteCredentialsFor(accountId: accountId)?.account
+                    } catch {
+                        Pixel.fire(pixel: .secureVaultError, error: error)
+                    }
+                }
+            }
     }
     
     required init?(coder: NSCoder) {
@@ -110,6 +134,7 @@ final class AutofillLoginSettingsListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = UserText.autofillLoginListTitle
+        extendedLayoutIncludesOpaqueBars = true
         setupCancellables()
         installSubviews()
         installConstraints()
@@ -127,9 +152,16 @@ final class AutofillLoginSettingsListViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if viewModel.authenticator.canAuthenticate() {
+        if viewModel.authenticator.canAuthenticate() && viewModel.authenticator.state == .loggedIn {
             AppDependencyProvider.shared.autofillLoginSession.startSession()
         }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        guard viewModel.viewState == .empty else { return }
+        adjustEmptyViewFooterSize()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -137,7 +169,9 @@ final class AutofillLoginSettingsListViewController: UIViewController {
 
         coordinator.animate(alongsideTransition: { _ in
             self.updateConstraintConstants()
-            self.emptyView.refreshConstraints()
+            if self.viewModel.viewState == .empty {
+                self.emptyView.refreshConstraints()
+            }
             if self.view.subviews.contains(self.noAuthAvailableView) {
                 self.noAuthAvailableView.refreshConstraints()
             }
@@ -166,17 +200,41 @@ final class AutofillLoginSettingsListViewController: UIViewController {
         detailsController.delegate = self
         let detailsNavigationController = UINavigationController(rootViewController: detailsController)
         navigationController?.present(detailsNavigationController, animated: true)
+        detailsViewController = detailsController
     }
-    
-    func showAccountDetails(_ account: SecureVaultModels.WebsiteAccount, animated: Bool = true) {
+
+    func makeAccountDetailsScreen(_ account: SecureVaultModels.WebsiteAccount) -> AutofillLoginDetailsViewController {
         let detailsController = AutofillLoginDetailsViewController(authenticator: viewModel.authenticator,
                                                                    account: account,
                                                                    tld: tld,
                                                                    authenticationNotRequired: viewModel.authenticationNotRequired)
         detailsController.delegate = self
-        navigationController?.pushViewController(detailsController, animated: animated)
+        detailsViewController = detailsController
+        return detailsController
     }
     
+    func showAccountDetails(_ account: SecureVaultModels.WebsiteAccount, animated: Bool = true) {
+        let detailsController = makeAccountDetailsScreen(account)
+        navigationController?.pushViewController(detailsController, animated: animated)
+        detailsViewController = detailsController
+    }
+
+    private func presentNeverPromptResetPromptAtIndexPath(_ indexPath: IndexPath) {
+        let controller = UIAlertController(title: "",
+                                           message: UserText.autofillResetNeverSavedActionTitle,
+                                           preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: UserText.autofillResetNeverSavedActionConfirmButton, style: .destructive) { [weak self] _ in
+            self?.viewModel.resetNeverPromptWebsites()
+            self?.tableView.reloadData()
+            Pixel.fire(pixel: .autofillLoginsSettingsResetExcludedConfirmed)
+        })
+        controller.addAction(UIAlertAction(title: UserText.autofillResetNeverSavedActionCancelButton, style: .cancel) { _ in
+            Pixel.fire(pixel: .autofillLoginsSettingsResetExcludedDismissed)
+        })
+        present(controller: controller, fromView: tableView.cellForRow(at: indexPath) ?? tableView)
+        Pixel.fire(pixel: .autofillLoginsSettingsResetExcludedDisplayed)
+    }
+
     private func setupCancellables() {
         viewModel.$viewState
             .receive(on: DispatchQueue.main)
@@ -231,18 +289,27 @@ final class AutofillLoginSettingsListViewController: UIViewController {
                 if error != .noAuthAvailable {
                     self.delegate?.autofillLoginSettingsListViewControllerDidFinish(self)
                 }
+            } else {
+                self.syncService.scheduler.requestSyncImmediately()
             }
         }
     }
 
-    private func presentDeleteConfirmation(for title: String) {
-        ActionMessageView.present(message: UserText.autofillLoginListLoginDeletedToastMessage(for: title),
+    private func presentDeleteConfirmation(for title: String, domain: String) {
+        let message = title.isEmpty ? UserText.autofillLoginListLoginDeletedToastMessageNoTitle
+                                    : UserText.autofillLoginListLoginDeletedToastMessage(for: title)
+
+        ActionMessageView.present(message: message,
                                   actionTitle: UserText.actionGenericUndo,
                                   presentationLocation: .withoutBottomBar,
                                   onAction: {
             self.viewModel.undoLastDelete()
+            self.syncService.scheduler.notifyDataChanged()
         }, onDidDismiss: {
             self.viewModel.clearUndoCache()
+            NotificationCenter.default.post(name: FireproofFaviconUpdater.deleteFireproofFaviconNotification,
+                                            object: nil,
+                                            userInfo: [FireproofFaviconUpdater.UserInfoKeys.faviconDomain: domain])
         })
     }
     
@@ -252,39 +319,38 @@ final class AutofillLoginSettingsListViewController: UIViewController {
         
         switch viewModel.viewState {
         case .showItems:
-            emptyView.isHidden = true
+            tableView.tableFooterView = nil
             tableView.isHidden = false
             lockedView.isHidden = true
             noAuthAvailableView.isHidden = true
             emptySearchView.isHidden = true
         case .noAuthAvailable:
-            emptyView.isHidden = true
+            tableView.tableFooterView = nil
             tableView.isHidden = true
             lockedView.isHidden = true
             noAuthAvailableView.isHidden = false
             emptySearchView.isHidden = true
         case .authLocked:
-            emptyView.isHidden = true
+            tableView.tableFooterView = nil
             tableView.isHidden = true
             lockedView.isHidden = false
             noAuthAvailableView.isHidden = true
             emptySearchView.isHidden = true
         case .empty:
-            emptyView.viewState = viewModel.isAutofillEnabled ? .autofillEnabled : .autofillDisabled
-            emptyView.isHidden = false
+            tableView.tableFooterView = emptyView
             tableView.isHidden = false
             setEditing(false, animated: false)
             lockedView.isHidden = true
             noAuthAvailableView.isHidden = true
             emptySearchView.isHidden = true
         case .searching:
-            emptyView.isHidden = true
+            tableView.tableFooterView = nil
             tableView.isHidden = false
             lockedView.isHidden = true
             noAuthAvailableView.isHidden = true
             emptySearchView.isHidden = true
         case .searchingNoResults:
-            emptyView.isHidden = true
+            tableView.tableFooterView = nil
             tableView.isHidden = false
             lockedView.isHidden = true
             noAuthAvailableView.isHidden = true
@@ -301,7 +367,7 @@ final class AutofillLoginSettingsListViewController: UIViewController {
             if tableView.isEditing {
                 navigationItem.rightBarButtonItems = [editButtonItem]
             } else {
-                if viewModel.isAutofillEnabled || (!viewModel.isAutofillEnabled && viewModel.hasAccountsSaved) {
+                if viewModel.isAutofillEnabledInSettings || (!viewModel.isAutofillEnabledInSettings && viewModel.hasAccountsSaved) {
                     navigationItem.rightBarButtonItems = [editButtonItem, addBarButtonItem]
                 } else {
                     navigationItem.rightBarButtonItems = [addBarButtonItem]
@@ -313,16 +379,16 @@ final class AutofillLoginSettingsListViewController: UIViewController {
             navigationItem.rightBarButtonItems = [addBarButtonItem]
             addBarButtonItem.isEnabled = false
         case .authLocked:
-            navigationItem.rightBarButtonItems = [editButtonItem, addBarButtonItem]
-            addBarButtonItem.isEnabled = false
-            editButtonItem.isEnabled = false
-        case .empty:
-            if viewModel.isAutofillEnabled {
+            if viewModel.hasAccountsSaved {
                 navigationItem.rightBarButtonItems = [editButtonItem, addBarButtonItem]
+                addBarButtonItem.isEnabled = false
                 editButtonItem.isEnabled = false
             } else {
                 navigationItem.rightBarButtonItems = [addBarButtonItem]
+                addBarButtonItem.isEnabled = false
             }
+        case .empty:
+            navigationItem.rightBarButtonItems = [addBarButtonItem]
             addBarButtonItem.isEnabled = true
         case .searching, .searchingNoResults:
             navigationItem.rightBarButtonItems = []
@@ -339,7 +405,9 @@ final class AutofillLoginSettingsListViewController: UIViewController {
             }
         case .searching, .searchingNoResults:
             navigationItem.searchController = searchController
-        case .empty, .authLocked, .noAuthAvailable:
+        case .authLocked:
+            navigationItem.searchController = viewModel.authenticationNotRequired && viewModel.hasAccountsSaved ? searchController : nil
+        case .empty, .noAuthAvailable:
             navigationItem.searchController = nil
         }
     }
@@ -385,10 +453,21 @@ final class AutofillLoginSettingsListViewController: UIViewController {
     private func updateConstraintConstants() {
         let isIPhoneLandscape = traitCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
         if isIPhoneLandscape {
-            lockedViewBottomConstraint.constant = (view.frame.height / 2 - max(lockedView.frame.height, 120.0) / 2)
+            let viewVerticalCenter = view.frame.height / 2
+            let lockedViewHeight = max(lockedView.frame.height, 120.0)
+            lockedViewBottomConstraint.constant = viewVerticalCenter - (lockedViewHeight / 2.0)
         } else {
             lockedViewBottomConstraint.constant = view.frame.height * 0.15
         }
+    }
+
+    // Adjust the footer size based on remaining space
+    private func adjustEmptyViewFooterSize() {
+        // Temporarily remove the footer
+        tableView.tableFooterView = nil
+        let remainingHeight = tableView.frame.height - tableView.contentSize.height - view.safeAreaInsets.bottom - view.safeAreaInsets.top
+        emptyView.adjustHeight(to: max(remainingHeight, 0))
+        tableView.tableFooterView = emptyView
     }
 
     // MARK: Cell Methods
@@ -397,13 +476,20 @@ final class AutofillLoginSettingsListViewController: UIViewController {
         let cell = tableView.dequeueCell(ofType: AutofillListItemTableViewCell.self, for: indexPath)
         cell.viewModel = item
         cell.accessoryType = .disclosureIndicator
+        cell.backgroundColor = UIColor(designSystemColor: .surface)
         return cell
     }
     
     private func enableAutofillCell(for tableView: UITableView, indexPath: IndexPath) -> EnableAutofillSettingsTableViewCell {
         let cell = tableView.dequeueCell(ofType: EnableAutofillSettingsTableViewCell.self, for: indexPath)
         cell.delegate = self
-        cell.isToggleOn = viewModel.isAutofillEnabled
+        cell.isToggleOn = viewModel.isAutofillEnabledInSettings
+        cell.theme = ThemeManager.shared.currentTheme
+        return cell
+    }
+
+    private func neverSavedCell(for tableView: UITableView, indexPath: IndexPath) -> AutofillNeverSavedTableViewCell {
+        let cell = tableView.dequeueCell(ofType: AutofillNeverSavedTableViewCell.self, for: indexPath)
         cell.theme = ThemeManager.shared.currentTheme
         return cell
     }
@@ -426,18 +512,25 @@ extension AutofillLoginSettingsListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         switch viewModel.sections[indexPath.section] {
+        case .enableAutofill:
+            switch EnableAutofillRows(rawValue: indexPath.row) {
+            case .resetNeverPromptWebsites:
+                presentNeverPromptResetPromptAtIndexPath(indexPath)
+            default:
+                break
+            }
         case .credentials(_, let items):
             let item = items[indexPath.row]
             showAccountDetails(item.account)
-        default:
-            break
         }
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         switch viewModel.viewState {
         case .empty:
-            return emptyView
+            return viewModel.sections[section] == .enableAutofill ? enableAutofillFooterView : nil
+        case .showItems:
+            return viewModel.sections[section] == .enableAutofill ? enableAutofillFooterView : nil
         default:
             return nil
         }
@@ -446,13 +539,34 @@ extension AutofillLoginSettingsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         switch viewModel.viewState {
         case .empty:
-            return max(tableView.bounds.height - tableView.contentSize.height, 250)
+            if viewModel.sections[section] == .enableAutofill {
+                return enableAutofillFooterView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+            }
+            return 0
         case .showItems:
-            return viewModel.sections[section] == .enableAutofill ? 10 : 0
+            if viewModel.sections[section] == .enableAutofill {
+                return enableAutofillFooterView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+            }
+            return 10.0
         default:
             return 0
         }
     }
+
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection: Int) {
+        if let view = view as? UITableViewHeaderFooterView {
+            let theme = ThemeManager.shared.currentTheme
+            view.textLabel?.textColor = theme.tableHeaderTextColor
+        }
+    }
+
+    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection: Int) {
+        if let view = view as? UITableViewHeaderFooterView {
+            let theme = ThemeManager.shared.currentTheme
+            view.textLabel?.textColor = theme.tableHeaderTextColor
+        }
+    }
+
 }
 
 // MARK: UITableViewDataSource
@@ -470,7 +584,14 @@ extension AutofillLoginSettingsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch viewModel.sections[indexPath.section] {
         case .enableAutofill:
-            return enableAutofillCell(for: tableView, indexPath: indexPath)
+            switch EnableAutofillRows(rawValue: indexPath.row) {
+            case .toggleAutofill:
+                return enableAutofillCell(for: tableView, indexPath: indexPath)
+            case .resetNeverPromptWebsites:
+                return neverSavedCell(for: tableView, indexPath: indexPath)
+            default:
+                fatalError("No cell for row at index \(indexPath.row)")
+            }
         case .credentials(_, let items):
             return credentialCell(for: tableView, item: items[indexPath.row], indexPath: indexPath)
         }
@@ -485,6 +606,7 @@ extension AutofillLoginSettingsListViewController: UITableViewDataSource {
         case .credentials(_, let items):
             if editingStyle == .delete {
                 let title = items[indexPath.row].title
+                let domain = items[indexPath.row].account.domain ?? ""
                 let accountId = items[indexPath.row].account.id
 
                 let tableContentToDelete = viewModel.tableContentsToDelete(accountId: accountId)
@@ -501,8 +623,9 @@ extension AutofillLoginSettingsListViewController: UITableViewDataSource {
                     }
                     tableView.endUpdates()
 
-                    presentDeleteConfirmation(for: title)
+                    presentDeleteConfirmation(for: title, domain: domain)
                 }
+                syncService.scheduler.notifyDataChanged()
             }
         default:
             break
@@ -561,20 +684,21 @@ extension AutofillLoginSettingsListViewController: AutofillLoginDetailsViewContr
     func autofillLoginDetailsViewControllerDidSave(_ controller: AutofillLoginDetailsViewController, account: SecureVaultModels.WebsiteAccount?) {
         viewModel.updateData()
         tableView.reloadData()
+        syncService.scheduler.notifyDataChanged()
 
         if let account = account {
             showAccountDetails(account)
         }
     }
 
-    func autofillLoginDetailsViewControllerDelete(account: SecureVaultModels.WebsiteAccount) {
-        let title = account.title ?? ""
+    func autofillLoginDetailsViewControllerDelete(account: SecureVaultModels.WebsiteAccount, title: String) {
         let deletedSuccessfully = viewModel.delete(account)
 
         if deletedSuccessfully {
             viewModel.updateData()
             tableView.reloadData()
-            presentDeleteConfirmation(for: title)
+            syncService.scheduler.notifyDataChanged()
+            presentDeleteConfirmation(for: title, domain: account.domain ?? "")
         }
     }
 }
@@ -589,7 +713,7 @@ extension AutofillLoginSettingsListViewController: EnableAutofillSettingsTableVi
             Pixel.fire(pixel: .autofillLoginsSettingsDisabled)
         }
         
-        viewModel.isAutofillEnabled = value
+        viewModel.isAutofillEnabledInSettings = value
         updateViewState()
     }
 }
@@ -599,7 +723,6 @@ extension AutofillLoginSettingsListViewController: EnableAutofillSettingsTableVi
 extension AutofillLoginSettingsListViewController: Themable {
 
     func decorate(with theme: Theme) {
-        lockedView.decorate(with: theme)
         emptyView.decorate(with: theme)
         emptySearchView.decorate(with: theme)
         noAuthAvailableView.decorate(with: theme)
@@ -634,6 +757,7 @@ extension AutofillLoginSettingsListViewController: UISearchResultsUpdating {
         if let query = searchController.searchBar.text {
             viewModel.filterData(with: query)
             emptySearchView.query = query
+            tableView.reloadData()
         }
     }
 }
@@ -663,3 +787,4 @@ extension AutofillLoginSettingsListViewController {
         )
     }
 }
+// swiftlint:enable file_length type_body_length

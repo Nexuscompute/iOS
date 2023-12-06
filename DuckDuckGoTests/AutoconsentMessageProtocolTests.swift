@@ -56,10 +56,12 @@ final class AutoconsentMessageProtocolTests: XCTestCase {
         
         let mockEmbeddedData = MockEmbeddedDataProvider(data: embeddedConfig, etag: "embedded")
 
+
         let manager = PrivacyConfigurationManager(fetchedETag: nil,
                                                   fetchedData: nil,
                                                   embeddedDataProvider: mockEmbeddedData,
-                                                  localProtection: MockDomainsProtectionStore())
+                                                  localProtection: MockDomainsProtectionStore(),
+                                                  internalUserDecider: DefaultInternalUserDecider())
         return AutoconsentUserScript(config: manager.privacyConfig, preferences: MockAutoconsentPreferences())
     }()
 
@@ -131,7 +133,7 @@ final class AutoconsentMessageProtocolTests: XCTestCase {
             },
             message: message
         )
-        waitForExpectations(timeout: 5.0)
+        waitForExpectations(timeout: 15.0)
     }
 
     @MainActor

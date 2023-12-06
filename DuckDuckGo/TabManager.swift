@@ -17,9 +17,10 @@
 //  limitations under the License.
 //
 
+import Common
 import Core
+import DDGSync
 import WebKit
-import os.log
 import BrowserServicesKit
 import Persistence
 
@@ -30,16 +31,22 @@ class TabManager {
     private var tabControllerCache = [TabViewController]()
 
     private let bookmarksDatabase: CoreDataDatabase
+    private let syncService: DDGSyncing
     private var previewsSource: TabPreviewsSource
     weak var delegate: TabDelegate?
+
+    @UserDefaultsWrapper(key: .faviconTabsCacheNeedsCleanup, defaultValue: true)
+    var tabsCacheNeedsCleanup: Bool
 
     init(model: TabsModel,
          previewsSource: TabPreviewsSource,
          bookmarksDatabase: CoreDataDatabase,
+         syncService: DDGSyncing,
          delegate: TabDelegate) {
         self.model = model
         self.previewsSource = previewsSource
         self.bookmarksDatabase = bookmarksDatabase
+        self.syncService = syncService
         self.delegate = delegate
         let index = model.currentIndex
         let tab = model.tabs[index]
@@ -58,7 +65,7 @@ class TabManager {
 
     private func buildController(forTab tab: Tab, url: URL?, inheritedAttribution: AdClickAttributionLogic.State?) -> TabViewController {
         let configuration =  WKWebViewConfiguration.persistent()
-        let controller = TabViewController.loadFromStoryboard(model: tab, bookmarksDatabase: bookmarksDatabase)
+        let controller = TabViewController.loadFromStoryboard(model: tab, bookmarksDatabase: bookmarksDatabase, syncService: syncService)
         controller.applyInheritedAttribution(inheritedAttribution)
         controller.attachWebView(configuration: configuration,
                                  andLoadRequest: url == nil ? nil : URLRequest.userInitiated(url!),
@@ -119,7 +126,7 @@ class TabManager {
         model.insert(tab: tab, at: model.currentIndex + 1)
         model.select(tabAt: model.currentIndex + 1)
 
-        let controller = TabViewController.loadFromStoryboard(model: tab, bookmarksDatabase: bookmarksDatabase)
+        let controller = TabViewController.loadFromStoryboard(model: tab, bookmarksDatabase: bookmarksDatabase, syncService: syncService)
         controller.attachWebView(configuration: configCopy,
                                  andLoadRequest: request,
                                  consumeCookies: !model.hasActiveTabs,
@@ -234,6 +241,39 @@ class TabManager {
     
     func prepareCurrentTabForDataClearing() {
         current?.prepareForDataClearing()
+    }
+
+    func cleanupTabsFaviconCache() {
+        guard tabsCacheNeedsCleanup else { return }
+
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self,
+                  let tabsCacheUrl = Favicons.CacheType.tabs.cacheLocation()?.appendingPathComponent(Favicons.Constants.tabsCachePath),
+                  let contents = try? FileManager.default.contentsOfDirectory(at: tabsCacheUrl, includingPropertiesForKeys: nil, options: []),
+                    !contents.isEmpty else { return }
+
+            let imageDomainURLs = contents.compactMap({ $0.filename })
+
+            // create a Set of all unique hosts in case there are hundreds of tabs with many duplicate hosts
+            let tabLink = Set(self.model.tabs.compactMap { tab in
+                if let host = tab.link?.url.host {
+                    return host
+                }
+
+                return nil
+            })
+
+            // hash the unique tab hosts
+            let tabLinksHashed = tabLink.map { Favicons.createHash(ofDomain: $0) }
+
+            // filter images that don't have a corresponding tab
+            let toDelete = imageDomainURLs.filter { !tabLinksHashed.contains($0) }
+            toDelete.forEach {
+                Favicons.shared.removeTabFavicon(forCacheKey: $0)
+            }
+
+            self.tabsCacheNeedsCleanup = false
+        }
     }
 }
 

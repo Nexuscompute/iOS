@@ -20,19 +20,21 @@
 import Foundation
 import Core
 import BrowserServicesKit
+import DDGSync
 @testable import DuckDuckGo
 
 class MockDependencyProvider: DependencyProvider {
     var appSettings: AppSettings
     var variantManager: VariantManager
     var featureFlagger: FeatureFlagger
-    var featureFlaggerInternalUserDecider: FeatureFlaggerInternalUserDecider
+    var internalUserDecider: InternalUserDecider
     var remoteMessagingStore: RemoteMessagingStore
     var homePageConfiguration: HomePageConfiguration
     var storageCache: StorageCache
     var voiceSearchHelper: VoiceSearchHelperProtocol
     var downloadManager: DownloadManager
     var autofillLoginSession: AutofillLoginSession
+    var autofillNeverPromptWebsitesManager: AutofillNeverPromptWebsitesManager
     var configurationManager: ConfigurationManager
 
     init() {
@@ -40,13 +42,14 @@ class MockDependencyProvider: DependencyProvider {
         appSettings = defaultProvider.appSettings
         variantManager = defaultProvider.variantManager
         featureFlagger = defaultProvider.featureFlagger
-        featureFlaggerInternalUserDecider = defaultProvider.featureFlaggerInternalUserDecider
+        internalUserDecider = defaultProvider.internalUserDecider
         remoteMessagingStore = defaultProvider.remoteMessagingStore
         homePageConfiguration = defaultProvider.homePageConfiguration
         storageCache = defaultProvider.storageCache
         voiceSearchHelper = defaultProvider.voiceSearchHelper
         downloadManager = defaultProvider.downloadManager
         autofillLoginSession = defaultProvider.autofillLoginSession
+        autofillNeverPromptWebsitesManager = defaultProvider.autofillNeverPromptWebsitesManager
         configurationManager = defaultProvider.configurationManager
     }
 }

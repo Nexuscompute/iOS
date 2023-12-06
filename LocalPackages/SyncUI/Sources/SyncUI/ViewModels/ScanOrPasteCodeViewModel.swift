@@ -24,12 +24,14 @@ public protocol ScanOrPasteCodeViewModelDelegate: AnyObject {
     var pasteboardString: String? { get }
 
     func startConnectMode() async -> String?
+    func endConnectMode()
 
     /// Returns true if we were able to use the code. Either way, stop validating.
     func syncCodeEntered(code: String) async -> Bool
 
     func codeCollectionCancelled()
     func gotoSettings()
+    func shareCode(_ code: String)
 
 }
 
@@ -61,12 +63,16 @@ public class ScanOrPasteCodeViewModel: ObservableObject {
 
     public weak var delegate: ScanOrPasteCodeViewModelDelegate?
 
-    var showQRCodeModel: ShowQRCodeViewModel?
+    var showQRCodeModel: ShowQRCodeViewModel
 
-    let isInRecoveryMode: Bool
+    let showConnectMode: Bool
+    let recoveryCode: String?
 
-    public init(isInRecoveryMode: Bool) {
-        self.isInRecoveryMode = isInRecoveryMode
+    public init(showConnectMode: Bool, recoveryCode: String?) {
+        self.showConnectMode = showConnectMode
+        self.recoveryCode = recoveryCode
+        showQRCodeModel = ShowQRCodeViewModel()
+        showQRCodeModel.code = recoveryCode
     }
 
     func codeScanned(_ code: String) async -> Bool {
@@ -81,16 +87,17 @@ public class ScanOrPasteCodeViewModel: ObservableObject {
         guard let string = delegate?
             .pasteboardString?
             .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: " ", with: "")
             .replacingOccurrences(of: "\n", with: "") else { return }
-        
+
         self.manuallyEnteredCode = string
         invalidCode = false
         isValidating = true
 
         Task { @MainActor in
             let codeUsed = await delegate?.syncCodeEntered(code: string) == true
-            isValidating = false
             if !codeUsed {
+                isValidating = false
                 invalidCode = true
             }
         }
@@ -102,12 +109,18 @@ public class ScanOrPasteCodeViewModel: ObservableObject {
     }
 
     func startConnectMode() -> ShowQRCodeViewModel {
-        let model = ShowQRCodeViewModel()
-        showQRCodeModel = model
         Task { @MainActor in
-            showQRCodeModel?.code = await delegate?.startConnectMode()
+            showQRCodeModel.code = await delegate?.startConnectMode()
         }
-        return model
+        return showQRCodeModel
+    }
+
+    func showShareCodeSheet() {
+        delegate?.shareCode(showQRCodeModel.code ?? "")
+    }
+
+    func endConnectMode() {
+        self.delegate?.endConnectMode()
     }
 
     func gotoSettings() {

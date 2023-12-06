@@ -17,8 +17,9 @@
 //  limitations under the License.
 //
 
+import Common
 import WebKit
-import os.log
+import GRDB
 
 public protocol WebCacheManagerCookieStore {
     
@@ -193,7 +194,9 @@ public class WebCacheManager {
                     for storageCookie in storageCookiesToRemove {
                         HTTPCookieStorage.shared.deleteCookie(storageCookie)
                     }
-                    
+
+                    self.removeObservationsData()
+
                     self.performSanityCheck(for: cookieStore, summary: cookieClearingSummary, tabCountInfo: tabCountInfo)
                     
                     DispatchQueue.main.async {
@@ -241,6 +244,49 @@ public class WebCacheManager {
     public func isCookie(_ cookie: HTTPCookie, matchingDomain domain: String) -> Bool {
         return cookie.domain == domain || (cookie.domain.hasPrefix(".") && domain.hasSuffix(cookie.domain))
     }
+
+    private func removeObservationsData() {
+        if let pool = getValidDatabasePool() {
+            removeObservationsData(from: pool)
+        } else {
+            os_log("Could not find valid pool to clear observations data", log: .generalLog, type: .debug)
+        }
+    }
+
+    func getValidDatabasePool() -> DatabasePool? {
+        let bundleID = Bundle.main.bundleIdentifier ?? ""
+
+        let databaseURLs = [
+            FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
+                       .appendingPathComponent("WebKit/WebsiteData/ResourceLoadStatistics/observations.db"),
+            FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
+                       .appendingPathComponent("WebKit/\(bundleID)/WebsiteData/ResourceLoadStatistics/observations.db")
+        ]
+
+        guard let validURL = databaseURLs.first(where: { FileManager.default.fileExists(atPath: $0.path) }),
+              let pool = try? DatabasePool(path: validURL.absoluteString) else {
+            return nil
+        }
+
+        return pool
+    }
+
+
+    private func removeObservationsData(from pool: DatabasePool) {
+         do {
+             try pool.write { database in
+                 try database.execute(sql: "PRAGMA wal_checkpoint(TRUNCATE);")
+
+                 let tables = try String.fetchAll(database, sql: "SELECT name FROM sqlite_master WHERE type='table'")
+
+                 for table in tables {
+                     try database.execute(sql: "DELETE FROM \(table)")
+                 }
+             }
+         } catch {
+             Pixel.fire(pixel: .debugCannotClearObservationsDatabase, error: error)
+         }
+     }
 
 }
 

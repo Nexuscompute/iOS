@@ -17,10 +17,11 @@
 //  limitations under the License.
 //
 
+import Common
 import UIKit
 import Core
-import os.log
 import PrivacyDashboard
+import DesignResourcesKit
 
 extension OmniBar: NibLoading {}
 
@@ -61,6 +62,7 @@ class OmniBar: UIView {
     @IBOutlet var searchContainerMaxWidthConstraint: NSLayoutConstraint!
     @IBOutlet var omniBarLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var omniBarTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet var separatorToBottom: NSLayoutConstraint!
 
     weak var omniDelegate: OmniBarDelegate?
     fileprivate var state: OmniBarState = SmallOmniBarState.HomeNonEditingState()
@@ -68,10 +70,22 @@ class OmniBar: UIView {
     
     private var privacyIconAndTrackersAnimator = PrivacyIconAndTrackersAnimator()
     private var notificationAnimator = OmniBarNotificationAnimator()
-    
-    
+
     static func loadFromXib() -> OmniBar {
         return OmniBar.load(nibName: "OmniBar")
+    }
+
+    private let appSettings: AppSettings
+
+    required init?(coder: NSCoder) {
+        appSettings = AppDependencyProvider.shared.appSettings
+        super.init(coder: coder)
+    }
+
+    // Tests require this
+    override init(frame: CGRect) {
+        appSettings = AppDependencyProvider.shared.appSettings
+        super.init(frame: frame)
     }
 
     override func awakeFromNib() {
@@ -185,6 +199,14 @@ class OmniBar: UIView {
         separatorView.isHidden = true
     }
 
+    func moveSeparatorToTop() {
+        separatorToBottom.constant = frame.height
+    }
+
+    func moveSeparatorToBottom() {
+        separatorToBottom.constant = 0
+    }
+
     func startBrowsing() {
         refreshState(state.onBrowsingStartedState)
     }
@@ -259,6 +281,11 @@ class OmniBar: UIView {
         }
     }
 
+    func selectTextToEnd(_ offset: Int) {
+        guard let fromPosition = textField.position(from: textField.beginningOfDocument, offset: offset) else { return }
+        textField.selectedTextRange = textField.textRange(from: fromPosition, to: textField.endOfDocument)
+    }
+
     fileprivate func refreshState(_ newState: OmniBarState) {
         if state.name != newState.name {
             os_log("OmniBar entering %s from %s", log: .generalLog, type: .debug, newState.name, state.name)
@@ -295,24 +322,16 @@ class OmniBar: UIView {
         }
         
         updateOmniBarPadding()
-        updateSearchBarBorder()
+
+        UIView.animate(withDuration: 0.0) {
+            self.layoutIfNeeded()
+        }
+        
     }
 
     private func updateOmniBarPadding() {
         omniBarLeadingConstraint.constant = (state.hasLargeWidth ? 24 : 8) + safeAreaInsets.left
         omniBarTrailingConstraint.constant = (state.hasLargeWidth ? 24 : 14) + safeAreaInsets.right
-    }
-    
-    private func updateSearchBarBorder() {
-        let theme = ThemeManager.shared.currentTheme
-        if state.showBackground {
-            editingBackground?.backgroundColor = theme.searchBarBackgroundColor
-            editingBackground?.borderColor = theme.searchBarBackgroundColor
-        } else {
-            editingBackground.borderWidth = 1.5
-            editingBackground.borderColor = theme.searchBarBorderColor
-            editingBackground.backgroundColor = UIColor.clear
-        }
     }
 
     /*
@@ -427,6 +446,7 @@ class OmniBar: UIView {
     }
 
     @IBAction func onSettingsButtonPressed(_ sender: Any) {
+        Pixel.fire(pixel: .addressBarSettings)
         omniDelegate?.onSettingsPressed()
     }
     
@@ -455,6 +475,7 @@ class OmniBar: UIView {
     }
     
     @IBAction func onSharePressed(_ sender: Any) {
+        Pixel.fire(pixel: .addressBarShare)
         omniDelegate?.onSharePressed()
     }
     
@@ -510,7 +531,7 @@ extension OmniBar: UITextFieldDelegate {
 extension OmniBar: Themable {
     
     public func decorate(with theme: Theme) {
-        backgroundColor = theme.barBackgroundColor
+        backgroundColor = theme.omniBarBackgroundColor
         tintColor = theme.barTintColor
         
         configureTextField()
@@ -527,15 +548,14 @@ extension OmniBar: Themable {
             textField.attributedText = OmniBar.demphasisePath(forUrl: url)
         }
         textField.textColor = theme.searchBarTextColor
-        textField.tintColor = theme.searchBarTextColor
+        textField.tintColor = UIColor(designSystemColor: .accent)
         textField.keyboardAppearance = theme.keyboardAppearance
-        clearButton.tintColor = theme.searchBarClearTextIconColor
-        voiceSearchButton.tintColor = theme.searchBarVoiceSearchIconColor
+        clearButton.tintColor = UIColor(designSystemColor: .icons)
+        voiceSearchButton.tintColor = UIColor(designSystemColor: .icons)
         
-        searchLoupe.tintColor = theme.barTintColor
+        searchLoupe.tintColor = UIColor(designSystemColor: .icons)
+        searchLoupe.alpha = 0.5
         cancelButton.setTitleColor(theme.barTintColor, for: .normal)
-        
-        updateSearchBarBorder()
     }
 }
 // swiftlint:enable file_length

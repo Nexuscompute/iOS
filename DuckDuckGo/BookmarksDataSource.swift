@@ -24,6 +24,7 @@ import Core
 class BookmarksDataSource: NSObject, UITableViewDataSource {
 
     let viewModel: BookmarkListInteracting
+    var onFaviconMissing: ((String) -> Void)?
 
     var isEmpty: Bool {
         viewModel.bookmarks.isEmpty
@@ -50,9 +51,13 @@ class BookmarksDataSource: NSObject, UITableViewDataSource {
             return cell
         } else {
             let cell = BookmarksViewControllerCellFactory.makeBookmarkCell(tableView, forIndexPath: indexPath)
-            cell.faviconImageView.loadFavicon(forDomain: bookmark.urlObject?.host, usingCache: .bookmarks)
+            cell.faviconImageView.loadFavicon(forDomain: bookmark.urlObject?.host, usingCache: .fireproof) { [weak self] _, isFake in
+                if isFake, let host = bookmark.urlObject?.host {
+                    self?.onFaviconMissing?(host)
+                }
+            }
             cell.titleLabel.text = bookmark.title
-            cell.favoriteImageViewContainer.isHidden = !bookmark.isFavorite
+            cell.favoriteImageViewContainer.isHidden = !bookmark.isFavorite(on: viewModel.favoritesDisplayMode.displayedFolder)
             return cell
         }
     }
@@ -91,7 +96,7 @@ class SearchBookmarksDataSource: NSObject, UITableViewDataSource {
         }
 
         let cell = BookmarksViewControllerCellFactory.makeBookmarkCell(tableView, forIndexPath: indexPath)
-        cell.faviconImageView.loadFavicon(forDomain: results[indexPath.row].url.host, usingCache: .bookmarks)
+        cell.faviconImageView.loadFavicon(forDomain: results[indexPath.row].url.host, usingCache: .fireproof)
         cell.titleLabel.text = results[indexPath.row].title
         cell.favoriteImageViewContainer.isHidden = !results[indexPath.row].isFavorite
         return cell

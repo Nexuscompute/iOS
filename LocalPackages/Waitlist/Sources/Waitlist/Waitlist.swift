@@ -25,13 +25,12 @@ public protocol WaitlistConstants {
     static var identifier: String { get }
     static var apiProductName: String { get }
     static var downloadURL: URL { get }
-    static var isWaitlistRemoved: Bool { get }
 
     static var backgroundTaskName: String { get }
     static var backgroundRefreshTaskIdentifier: String { get }
     static var minimumConfigurationRefreshInterval: TimeInterval { get }
 
-    static var notificationIdentitier: String { get }
+    static var notificationIdentifier: String { get }
     static var inviteAvailableNotificationTitle: String { get }
     static var inviteAvailableNotificationBody: String { get }
 }
@@ -45,6 +44,7 @@ public protocol Waitlist: WaitlistConstants {
     static var shared: Self { get }
 
     var isAvailable: Bool { get }
+    var isWaitlistRemoved: Bool { get }
 
     var waitlistStorage: WaitlistStorage { get }
     var waitlistRequest: WaitlistRequest { get }
@@ -189,7 +189,7 @@ public extension Waitlist {
         notificationContent.title = Self.inviteAvailableNotificationTitle
         notificationContent.body = Self.inviteAvailableNotificationBody
 
-        let notificationIdentifier = Self.notificationIdentitier
+        let notificationIdentifier = Self.notificationIdentifier
         let request = UNNotificationRequest(identifier: notificationIdentifier, content: notificationContent, trigger: nil)
 
         UNUserNotificationCenter.current().add(request)

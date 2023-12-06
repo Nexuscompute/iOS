@@ -33,8 +33,8 @@ class BookmarksExporterTests: XCTestCase {
 
         htmlLoader = HtmlTestDataLoader()
 
-        importer = BookmarksImporter(coreDataStore: storage)
-        exporter = BookmarksExporter(coreDataStore: storage)
+        importer = BookmarksImporter(coreDataStore: storage, favoritesDisplayMode: .displayNative(.mobile))
+        exporter = BookmarksExporter(coreDataStore: storage, favoritesDisplayMode: .displayNative(.mobile))
     }
 
     override func tearDownWithError() throws {
@@ -128,7 +128,6 @@ class BookmarksExporterTests: XCTestCase {
             XCTFail("Could not import HTML")
         }
     }
-    // swiftlint:enable line_length
 
     func test_WhenImportBrave_ThenExportSuccess() async throws {
         let result = await importer.parseAndSave(html: htmlLoader.fromHtmlFile("MockFiles/bookmarks_brave.html"))
@@ -198,7 +197,7 @@ class BookmarksExporterTests: XCTestCase {
         }
     }
 
-    // swiftlint:disable function_body_length
+    // swiftlint:disable:next function_body_length
     func buildCommonContent(level: Int = 2) -> String {
         return [
             BookmarksExporter.Template.openFolder(level: level, named: "FolderA-Level1"),

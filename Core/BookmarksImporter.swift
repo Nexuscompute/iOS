@@ -17,11 +17,11 @@
 //  limitations under the License.
 //
 
+import Common
 import Foundation
 import SwiftSoup
 import Bookmarks
 import Persistence
-import os.log
 
 public enum BookmarksImportError: Error {
     case invalidHtmlNoDLTag
@@ -42,8 +42,8 @@ final public class BookmarksImporter {
     private(set) var importedBookmarks: [BookmarkOrFolder] = []
     private(set) var coreDataStorage: BookmarkCoreDataImporter
 
-    public init(coreDataStore: CoreDataDatabase) {
-        coreDataStorage = BookmarkCoreDataImporter(database: coreDataStore)
+    public init(coreDataStore: CoreDataDatabase, favoritesDisplayMode: FavoritesDisplayMode) {
+        coreDataStorage = BookmarkCoreDataImporter(database: coreDataStore, favoritesDisplayMode: favoritesDisplayMode)
     }
 
     func isDocumentInSafariFormat(_ document: Document) -> Bool {

@@ -28,7 +28,7 @@ class BookmarkEntityTests: XCTestCase {
     var db: CoreDataDatabase!
     var context: NSManagedObjectContext!
     var root: BookmarkEntity!
-    var favorites: BookmarkEntity!
+    var favoritesFolders: [BookmarkEntity] = []
 
     override func setUpWithError() throws {
         try super.setUpWithError()
@@ -45,15 +45,15 @@ class BookmarkEntityTests: XCTestCase {
         root = BookmarkUtils.fetchRootFolder(context)
         XCTAssertNotNil(root)
 
-        favorites = BookmarkUtils.fetchFavoritesFolder(context)
-        XCTAssertNotNil(favorites)
+        favoritesFolders = BookmarkUtils.fetchFavoritesFolders(for: .displayNative(.mobile), in: context)
+        XCTAssertNotNil(favoritesFolders)
     }
 
     override func tearDownWithError() throws {
         try super.tearDownWithError()
 
         root = nil
-        favorites = nil
+        favoritesFolders = []
         context = nil
 
         try db.tearDown(deleteStores: true)
@@ -73,7 +73,7 @@ class BookmarkEntityTests: XCTestCase {
                                                    url: "u",
                                                    parent: root,
                                                    context: context)
-        favorite.addToFavorites(favoritesRoot: favorites)
+        favorite.addToFavorites(folders: favoritesFolders)
 
         try context.save()
     }
@@ -84,22 +84,6 @@ class BookmarkEntityTests: XCTestCase {
         try context.save()
     }
 
-    func testWhenBookmarkIsMissingURLThenValidationFails() {
-        let bookmark = BookmarkEntity.makeBookmark(title: "t",
-                                                   url: "u",
-                                                   parent: root,
-                                                   context: context)
-
-        bookmark.url = nil
-
-        do {
-            try context.save()
-            XCTFail("Save should fail")
-        } catch {
-
-        }
-    }
-
     func testWhenFavoriteIsUnderWrongFavoriteRootThenValidationFails() {
         let favorite = BookmarkEntity.makeBookmark(title: "t",
                                                    url: "u",
@@ -107,22 +91,6 @@ class BookmarkEntityTests: XCTestCase {
                                                    context: context)
 
         favorite.addToFavorites(favoritesRoot: root)
-
-        do {
-            try context.save()
-            XCTFail("Save should fail")
-        } catch {
-
-        }
-    }
-
-    func testWhenFavoriteIsMissingFavoriteRootThenValidationFails() {
-        let favorite = BookmarkEntity.makeBookmark(title: "t",
-                                                   url: "u",
-                                                   parent: root,
-                                                   context: context)
-
-        favorite.setValue(true, forKey: #keyPath(BookmarkEntity.isFavorite))
 
         do {
             try context.save()

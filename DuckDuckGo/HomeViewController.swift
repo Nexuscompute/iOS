@@ -19,10 +19,15 @@
 
 import UIKit
 import Core
-import os.log
 import Bookmarks
 import Combine
+import Common
+import DDGSync
+import Persistence
 
+// swiftlint:disable file_length
+
+// swiftlint:disable:next type_body_length
 class HomeViewController: UIViewController {
     
     @IBOutlet weak var ctaContainerBottom: NSLayoutConstraint!
@@ -50,7 +55,7 @@ class HomeViewController: UIViewController {
             
             delegate?.home(self, searchTransitionUpdated: percent)
             chromeDelegate?.omniBar.alpha = percent
-            chromeDelegate?.tabsBar.alpha = percent
+            chromeDelegate?.tabBarContainer.alpha = percent
         }
     }
     
@@ -62,22 +67,102 @@ class HomeViewController: UIViewController {
     
     private let tabModel: Tab
     private let favoritesViewModel: FavoritesListInteracting
+    private let appSettings: AppSettings
+    private let syncService: DDGSyncing
+    private let syncDataProviders: SyncDataProviders
     private var viewModelCancellable: AnyCancellable?
-    
-    static func loadFromStoryboard(model: Tab, favoritesViewModel: FavoritesListInteracting) -> HomeViewController {
+    private var favoritesDisplayModeCancellable: AnyCancellable?
+
+#if APP_TRACKING_PROTECTION
+    private let appTPHomeViewModel: AppTPHomeViewModel
+#endif
+
+#if APP_TRACKING_PROTECTION
+    // swiftlint:disable:next function_parameter_count
+    static func loadFromStoryboard(
+        model: Tab,
+        favoritesViewModel: FavoritesListInteracting,
+        appSettings: AppSettings,
+        syncService: DDGSyncing,
+        syncDataProviders: SyncDataProviders,
+        appTPDatabase: CoreDataDatabase
+    ) -> HomeViewController {
         let storyboard = UIStoryboard(name: "Home", bundle: nil)
         let controller = storyboard.instantiateViewController(identifier: "HomeViewController", creator: { coder in
-            HomeViewController(coder: coder, tabModel: model, favoritesViewModel: favoritesViewModel)
+            HomeViewController(
+                coder: coder,
+                tabModel: model,
+                favoritesViewModel: favoritesViewModel,
+                appSettings: appSettings,
+                syncService: syncService,
+                syncDataProviders: syncDataProviders,
+                appTPDatabase: appTPDatabase
+            )
         })
         return controller
     }
-    
-    required init?(coder: NSCoder, tabModel: Tab, favoritesViewModel: FavoritesListInteracting) {
+#else
+    static func loadFromStoryboard(
+        model: Tab,
+        favoritesViewModel: FavoritesListInteracting,
+        appSettings: AppSettings,
+        syncService: DDGSyncing,
+        syncDataProviders: SyncDataProviders
+    ) -> HomeViewController {
+        let storyboard = UIStoryboard(name: "Home", bundle: nil)
+        let controller = storyboard.instantiateViewController(identifier: "HomeViewController", creator: { coder in
+            HomeViewController(
+                coder: coder,
+                tabModel: model,
+                favoritesViewModel: favoritesViewModel,
+                appSettings: appSettings,
+                syncService: syncService,
+                syncDataProviders: syncDataProviders
+            )
+        })
+        return controller
+    }
+#endif
+
+#if APP_TRACKING_PROTECTION
+    required init?(
+        coder: NSCoder,
+        tabModel: Tab,
+        favoritesViewModel: FavoritesListInteracting,
+        appSettings: AppSettings,
+        syncService: DDGSyncing,
+        syncDataProviders: SyncDataProviders,
+        appTPDatabase: CoreDataDatabase
+    ) {
         self.tabModel = tabModel
         self.favoritesViewModel = favoritesViewModel
+        self.appSettings = appSettings
+        self.syncService = syncService
+        self.syncDataProviders = syncDataProviders
+
+        self.appTPHomeViewModel = AppTPHomeViewModel(appTrackingProtectionDatabase: appTPDatabase)
+
         super.init(coder: coder)
     }
-    
+#else
+    required init?(
+        coder: NSCoder,
+        tabModel: Tab,
+        favoritesViewModel: FavoritesListInteracting,
+        appSettings: AppSettings,
+        syncService: DDGSyncing,
+        syncDataProviders: SyncDataProviders
+    ) {
+        self.tabModel = tabModel
+        self.favoritesViewModel = favoritesViewModel
+        self.appSettings = appSettings
+        self.syncService = syncService
+        self.syncDataProviders = syncDataProviders
+
+        super.init(coder: coder)
+    }
+#endif
+
     required init?(coder: NSCoder) {
         fatalError("Not implemented")
     }
@@ -107,6 +192,16 @@ class HomeViewController: UIViewController {
                 self.delegate?.home(self, didRequestHideLogo: false)
             }
         }
+
+        favoritesDisplayModeCancellable = NotificationCenter.default.publisher(for: AppUserDefaults.Notifications.favoritesDisplayModeChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else {
+                    return
+                }
+                self.favoritesViewModel.favoritesDisplayMode = self.appSettings.favoritesDisplayMode
+                self.collectionView.reloadData()
+            }
     }
     
     @objc func bookmarksDidChange() {
@@ -120,9 +215,17 @@ class HomeViewController: UIViewController {
     }
 
     func configureCollectionView() {
+#if APP_TRACKING_PROTECTION
         collectionView.configure(withController: self,
                                  favoritesViewModel: favoritesViewModel,
+                                 appTPHomeViewModel: appTPHomeViewModel,
                                  andTheme: ThemeManager.shared.currentTheme)
+#else
+        collectionView.configure(withController: self,
+                                 favoritesViewModel: favoritesViewModel,
+                                 appTPHomeViewModel: nil,
+                                 andTheme: ThemeManager.shared.currentTheme)
+#endif
     }
     
     func enableContentUnderflow() -> CGFloat {
@@ -150,8 +253,8 @@ class HomeViewController: UIViewController {
         collectionView.omniBarCancelPressed()
     }
     
-    func openedAsNewTab() {
-        collectionView.openedAsNewTab()
+    func openedAsNewTab(allowingKeyboard: Bool) {
+        collectionView.openedAsNewTab(allowingKeyboard: allowingKeyboard)
         showNextDaxDialog()
     }
     
@@ -164,9 +267,11 @@ class HomeViewController: UIViewController {
         
         if presentedViewController == nil { // prevents these being called when settings forces this controller to be reattached
             showNextDaxDialog()
-            Pixel.fire(pixel: .homeScreenShown)
         }
-                
+
+        Pixel.fire(pixel: .homeScreenShown)
+        collectionView.didAppear()
+
         viewHasAppeared = true
         tabModel.viewed = true
     }
@@ -262,6 +367,9 @@ class HomeViewController: UIViewController {
     func launchNewSearch() {
         collectionView.launchNewSearch()
     }
+
+    private(set) lazy var faviconsFetcherOnboarding: FaviconsFetcherOnboarding =
+        .init(syncService: syncService, syncBookmarksAdapter: syncDataProviders.bookmarksAdapter)
 }
 
 extension HomeViewController: FavoritesHomeViewSectionRendererDelegate {
@@ -269,7 +377,7 @@ extension HomeViewController: FavoritesHomeViewSectionRendererDelegate {
     func favoritesRenderer(_ renderer: FavoritesHomeViewSectionRenderer, didSelect favorite: BookmarkEntity) {
         guard let url = favorite.urlObject else { return }
         Pixel.fire(pixel: .homeScreenFavouriteLaunched)
-        Favicons.shared.loadFavicon(forDomain: url.host, intoCache: .bookmarks, fromCache: .tabs)
+        Favicons.shared.loadFavicon(forDomain: url.host, intoCache: .fireproof, fromCache: .tabs)
         delegate?.home(self, didRequestUrl: url)
     }
     

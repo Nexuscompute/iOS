@@ -18,13 +18,15 @@
 //
 
 import UIKit
+import Common
 import Core
+import DDGSync
 import WebKit
-import os.log
 import Bookmarks
 import Persistence
 
 // swiftlint:disable file_length
+// swiftlint:disable:next type_body_length
 class TabSwitcherViewController: UIViewController {
     
     struct Constants {
@@ -46,11 +48,11 @@ class TabSwitcherViewController: UIViewController {
     @IBOutlet weak var displayModeButton: UIButton!
     @IBOutlet weak var bookmarkAllButton: UIButton!
     
-    @IBOutlet weak var fireButton: FireBarButtonItem!
+    @IBOutlet weak var fireButton: UIBarButtonItem!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var plusButton: UIBarButtonItem!
     
-    @IBOutlet weak var topFireButton: FireButton!
+    @IBOutlet weak var topFireButton: UIButton!
     @IBOutlet weak var topPlusButton: UIButton!
     @IBOutlet weak var topDoneButton: UIButton!
 
@@ -61,6 +63,7 @@ class TabSwitcherViewController: UIViewController {
     weak var previewsSource: TabPreviewsSource!
     
     private var bookmarksDatabase: CoreDataDatabase
+    private let syncService: DDGSyncing
     
     weak var reorderGestureRecognizer: UIGestureRecognizer?
     
@@ -70,12 +73,15 @@ class TabSwitcherViewController: UIViewController {
     
     private var tabSwitcherSettings: TabSwitcherSettings = DefaultTabSwitcherSettings()
     private var isProcessingUpdates = false
+    private var canUpdateCollection = true
 
     let favicons = Favicons.shared
     
     required init?(coder: NSCoder,
-                   bookmarksDatabase: CoreDataDatabase) {
+                   bookmarksDatabase: CoreDataDatabase,
+                   syncService: DDGSyncing) {
         self.bookmarksDatabase = bookmarksDatabase
+        self.syncService = syncService
         super.init(coder: coder)
     }
     
@@ -121,17 +127,16 @@ class TabSwitcherViewController: UIViewController {
     private func refreshDisplayModeButton(theme: Theme = ThemeManager.shared.currentTheme) {
         switch theme.currentImageSet {
         case .dark:
-            // Reverse colors (selection)
             if tabSwitcherSettings.isGridViewEnabled {
-                displayModeButton.setImage(UIImage(named: "TabsToggleList"), for: .normal)
+                displayModeButton.setImage(UIImage(named: "tabsToggleGrid-Dark"), for: .normal)
             } else {
-                displayModeButton.setImage(UIImage(named: "TabsToggleGrid"), for: .normal)
+                displayModeButton.setImage(UIImage(named: "tabsToggleList-Dark"), for: .normal)
             }
         case .light:
             if tabSwitcherSettings.isGridViewEnabled {
-                displayModeButton.setImage(UIImage(named: "TabsToggleGrid"), for: .normal)
+                displayModeButton.setImage(UIImage(named: "tabsToggleGrid-Light"), for: .normal)
             } else {
-                displayModeButton.setImage(UIImage(named: "TabsToggleList"), for: .normal)
+                displayModeButton.setImage(UIImage(named: "tabsToggleList-Light"), for: .normal)
             }
         }
     }
@@ -165,16 +170,7 @@ class TabSwitcherViewController: UIViewController {
             if !ViewHighlighter.highlightedViews.contains(where: { $0.view == view }) {
                 ViewHighlighter.hideAll()
                 ViewHighlighter.showIn(window, focussedOnView: view)
-                
-                if let fireButton = view as? FireButton {
-                    FireButtonExperiment.playFireButtonForOnboarding(fireButton: fireButton)
-                }
             }
-        } else {
-            guard let button = !topFireButton.isHidden ? topFireButton : fireButton.button else { return }
-            
-            FireButtonExperiment.playFireButtonAnimationOnTabSwitcher(fireButton: button,
-                                                                      tabCount: tabsModel.count)
         }
     }
     
@@ -251,7 +247,8 @@ class TabSwitcherViewController: UIViewController {
         alert.overrideUserInterfaceStyle()
         alert.addAction(UIAlertAction(title: UserText.actionCancel, style: .cancel))
         alert.addAction(title: UserText.actionBookmark, style: .default) {
-            let model = MenuBookmarksViewModel(bookmarksDatabase: self.bookmarksDatabase)
+            let model = MenuBookmarksViewModel(bookmarksDatabase: self.bookmarksDatabase, syncService: self.syncService)
+            model.favoritesDisplayMode = AppDependencyProvider.shared.appSettings.favoritesDisplayMode
             let result = self.bookmarkAll(viewModel: model)
             self.displayBookmarkAllStatusMessage(with: result, openTabsCount: self.tabsModel.tabs.count)
         }
@@ -266,7 +263,7 @@ class TabSwitcherViewController: UIViewController {
             guard let link = tab.link else { return }
             if viewModel.bookmark(for: link.url) == nil {
                 viewModel.createBookmark(title: link.displayTitle, url: link.url)
-                favicons.loadFavicon(forDomain: link.url.host, intoCache: .bookmarks, fromCache: .tabs)
+                favicons.loadFavicon(forDomain: link.url.host, intoCache: .fireproof, fromCache: .tabs)
                 newCount += 1
             }
         }
@@ -301,6 +298,9 @@ class TabSwitcherViewController: UIViewController {
     }
     
     func markCurrentAsViewedAndDismiss() {
+        // Will be dismissed, so no need to process incoming updates
+        canUpdateCollection = false
+
         if let current = currentSelection {
             let tab = tabsModel.get(tabAt: current)
             tab.viewed = true
@@ -312,10 +312,6 @@ class TabSwitcherViewController: UIViewController {
 
     @IBAction func onFirePressed(sender: AnyObject) {
         Pixel.fire(pixel: .forgetAllPressedTabSwitching)
-        DailyPixel.fire(pixel: .experimentDailyFireButtonTapped)
-        FireButton.stopAllFireButtonAnimations()
-        
-        FireButtonExperiment.storeThatFireButtonWasTapped()
         
         if DaxDialogs.shared.shouldShowFireButtonPulse {
             let spec = DaxDialogs.shared.fireButtonEducationMessage()
@@ -340,6 +336,12 @@ class TabSwitcherViewController: UIViewController {
     func dismiss() {
         dismiss(animated: true, completion: nil)
     }
+
+    override func dismiss(animated: Bool, completion: (() -> Void)? = nil) {
+        canUpdateCollection = false
+        tabsModel.tabs.forEach { $0.removeObserver(self) }
+        super.dismiss(animated: animated, completion: completion)
+    }
 }
 
 extension TabSwitcherViewController: TabViewCellDelegate {
@@ -348,10 +350,16 @@ extension TabSwitcherViewController: TabViewCellDelegate {
         guard let index = tabsModel.indexOf(tab: tab) else { return }
         let isLastTab = tabsModel.count == 1
         if isLastTab {
+            // Will be dismissed, so no need to process incoming updates
+            canUpdateCollection = false
+
             delegate.tabSwitcher(self, didRemoveTab: tab)
             currentSelection = tabsModel.currentIndex
             refreshTitle()
             collectionView.reloadData()
+            DispatchQueue.global(qos: .background).async {
+                Favicons.shared.clearCache(.tabs, clearMemoryCache: true)
+            }
         } else {
             collectionView.performBatchUpdates({
                 isProcessingUpdates = true
@@ -363,12 +371,24 @@ extension TabSwitcherViewController: TabViewCellDelegate {
                 guard let current = self.currentSelection else { return }
                 self.refreshTitle()
                 self.collectionView.reloadItems(at: [IndexPath(row: current, section: 0)])
+                
+                // remove favicon from tabs cache when no other tabs have that domain
+                self.removeFavicon(forTab: tab)
             })
         }
     }
     
     func isCurrent(tab: Tab) -> Bool {
         return currentSelection == tabsModel.indexOf(tab: tab)
+    }
+
+    private func removeFavicon(forTab tab: Tab) {
+        DispatchQueue.global(qos: .background).async {
+            if let currentHost = tab.link?.url.host,
+               !self.tabsModel.tabExists(withHost: currentHost) {
+                Favicons.shared.removeTabFavicon(forDomain: currentHost)
+            }
+        }
     }
 
 }
@@ -482,10 +502,16 @@ extension TabSwitcherViewController: TabObserver {
     
     func didChange(tab: Tab) {
         // Reloading when updates are processed will result in a crash
-        guard !isProcessingUpdates else { return }
-        
-        if let index = tabsModel.indexOf(tab: tab) {
-            collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+        guard !isProcessingUpdates, canUpdateCollection else {
+            return
+        }
+
+        if let index = tabsModel.indexOf(tab: tab), index < collectionView.numberOfItems(inSection: 0) {
+            if #available(iOS 15.0, *) {
+                collectionView.reconfigureItems(at: [IndexPath(row: index, section: 0)])
+            } else {
+                collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+            }
         }
     }
 }
@@ -503,14 +529,8 @@ extension TabSwitcherViewController: Themable {
         topPlusButton.tintColor = theme.barTintColor
         topFireButton.tintColor = theme.barTintColor
         
-        fireButton.decorate(with: theme)
-        topFireButton.decorate(with: theme)
-        
         toolbar.barTintColor = theme.barBackgroundColor
         toolbar.tintColor = theme.barTintColor
-        
-        FireButtonExperiment.decorateFireButton(fireButton: fireButton, for: theme)
-        FireButtonExperiment.decorateFireButton(fireButton: topFireButton, for: theme)
                 
         collectionView.reloadData()
     }

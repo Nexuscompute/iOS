@@ -40,4 +40,5 @@ class OnboardingDefaultBroswerViewController: OnboardingContentViewController {
         }
         super.onContinuePressed(navigationHandler: navigationHandler)
     }
+
 }

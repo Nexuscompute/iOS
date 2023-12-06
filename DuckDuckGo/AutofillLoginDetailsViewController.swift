@@ -25,7 +25,7 @@ import Combine
 
 protocol AutofillLoginDetailsViewControllerDelegate: AnyObject {
     func autofillLoginDetailsViewControllerDidSave(_ controller: AutofillLoginDetailsViewController, account: SecureVaultModels.WebsiteAccount?)
-    func autofillLoginDetailsViewControllerDelete(account: SecureVaultModels.WebsiteAccount)
+    func autofillLoginDetailsViewControllerDelete(account: SecureVaultModels.WebsiteAccount, title: String)
 }
 
 class AutofillLoginDetailsViewController: UIViewController {
@@ -46,7 +46,8 @@ class AutofillLoginDetailsViewController: UIViewController {
     private lazy var saveBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
         let attributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        barButtonItem.setTitleTextAttributes(attributes, for: .normal)
+        barButtonItem.setTitleTextAttributes(attributes, for: [.normal])
+        barButtonItem.setTitleTextAttributes(attributes, for: [.disabled])
         return barButtonItem
     }()
 
@@ -74,23 +75,37 @@ class AutofillLoginDetailsViewController: UIViewController {
         self.authenticationNotRequired = authenticationNotRequired
         super.init(nibName: nil, bundle: nil)
         self.viewModel.delegate = self
-
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    var account: SecureVaultModels.WebsiteAccount? {
+        get {
+            viewModel.account
+        }
+        set {
+            if let newValue {
+                viewModel.updateData(with: newValue)
+            } else if viewModel.viewMode == .view {
+                navigationController?.dismiss(animated: true)
+            } else {
+                viewModel.viewMode = .new
+            }
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         installSubviews()
-        setupNavigationBar()
         setupCancellables()
         setupTableViewAppearance()
         applyTheme(ThemeManager.shared.currentTheme)
         installConstraints()
         configureNotifications()
+        setupNavigationBar()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -104,7 +119,7 @@ class AutofillLoginDetailsViewController: UIViewController {
         super.viewWillDisappear(animated)
         if isMovingFromParent {
             AppDependencyProvider.shared.autofillLoginSession.lastAccessedAccount = nil
-        } else if authenticator.canAuthenticate() {
+        } else if authenticator.canAuthenticate() && authenticator.state == .loggedIn {
             AppDependencyProvider.shared.autofillLoginSession.startSession()
         }
     }
@@ -175,7 +190,7 @@ class AutofillLoginDetailsViewController: UIViewController {
     }
 
     @objc private func appWillMoveToBackgroundCallback() {
-        if viewModel.viewMode != .new || viewModel.shouldShowSaveButton {
+        if viewModel.viewMode != .new || viewModel.canSave {
             authenticationNotRequired = false
         }
         authenticator.logOut()
@@ -198,7 +213,8 @@ class AutofillLoginDetailsViewController: UIViewController {
             viewModel.$title,
             viewModel.$username,
             viewModel.$password,
-            viewModel.$address)
+            viewModel.$address,
+            viewModel.$notes)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.setupNavigationBar()
@@ -234,11 +250,13 @@ class AutofillLoginDetailsViewController: UIViewController {
     private func updateNavigationBarButtons() {
         switch authenticator.state {
         case .loggedOut:
-            navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = authenticationNotRequired }
+            saveBarButtonItem.isEnabled = authenticationNotRequired && viewModel.canSave
+            editBarButtonItem.isEnabled = authenticationNotRequired
         case .notAvailable:
             navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = false }
         case .loggedIn:
-            navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = true }
+            saveBarButtonItem.isEnabled = viewModel.canSave
+            editBarButtonItem.isEnabled = true
         }
     }
     
@@ -252,25 +270,17 @@ class AutofillLoginDetailsViewController: UIViewController {
     private func setupNavigationBar() {
         title = viewModel.navigationTitle
         switch viewModel.viewMode {
-        case .edit:
+        case .edit, .new:
+            saveBarButtonItem.isEnabled = viewModel.canSave
             navigationItem.rightBarButtonItem = saveBarButtonItem
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
 
         case .view:
             navigationItem.rightBarButtonItem = editBarButtonItem
             navigationItem.leftBarButtonItem = nil
-        
-        case .new:
-            if viewModel.shouldShowSaveButton {
-                navigationItem.rightBarButtonItem = saveBarButtonItem
-            } else {
-                navigationItem.rightBarButtonItem = nil
-            }
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         }
     }
-    
-    
+
     @objc private func toggleEditMode() {
         viewModel.toggleEditMode()
     }
@@ -309,8 +319,8 @@ extension AutofillLoginDetailsViewController: AutofillLoginDetailsViewModelDeleg
         present(alert, animated: true)
     }
 
-    func autofillLoginDetailsViewModelDelete(account: SecureVaultModels.WebsiteAccount) {
-        delegate?.autofillLoginDetailsViewControllerDelete(account: account)
+    func autofillLoginDetailsViewModelDelete(account: SecureVaultModels.WebsiteAccount, title: String) {
+        delegate?.autofillLoginDetailsViewControllerDelete(account: account, title: title)
         navigationController?.popViewController(animated: true)
     }
 
@@ -324,7 +334,6 @@ extension AutofillLoginDetailsViewController: AutofillLoginDetailsViewModelDeleg
 extension AutofillLoginDetailsViewController: Themable {
 
     func decorate(with theme: Theme) {
-        lockedView.decorate(with: theme)
         lockedView.backgroundColor = theme.backgroundColor
 
         noAuthAvailableView.decorate(with: theme)

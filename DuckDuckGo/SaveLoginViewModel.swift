@@ -24,11 +24,13 @@ import Core
 protocol SaveLoginViewModelDelegate: AnyObject {
     func saveLoginViewModelDidSave(_ viewModel: SaveLoginViewModel)
     func saveLoginViewModelDidCancel(_ viewModel: SaveLoginViewModel)
+    func saveLoginViewModelNeverPrompt(_ viewModel: SaveLoginViewModel)
     func saveLoginViewModelConfirmKeepUsing(_ viewModel: SaveLoginViewModel, isAlreadyDismissed: Bool)
+    func saveLoginViewModelDidResizeContent(_ viewModel: SaveLoginViewModel, contentHeight: CGFloat)
 }
 
 final class SaveLoginViewModel: ObservableObject {
-    
+
     /*
      - The url of the last site where autofill was declined is stored in app memory
      - The count of the number of times autofill has been declined is kept in user defaults
@@ -48,7 +50,7 @@ final class SaveLoginViewModel: ObservableObject {
     @UserDefaultsWrapper(key: .autofillFirstTimeUser, defaultValue: true)
     private var autofillFirstTimeUser: Bool
 
-    private let numberOfRejectionsToTurnOffAutofill = 3
+    private let numberOfRejectionsToTurnOffAutofill = 2
     private let maximumPasswordDisplayCount = 40
     private let credentialManager: SaveAutofillLoginManagerProtocol
     private let appSettings: AppSettings
@@ -57,6 +59,24 @@ final class SaveLoginViewModel: ObservableObject {
     var didSave = false
     
     weak var delegate: SaveLoginViewModelDelegate?
+
+    var minHeight: CGFloat {
+        switch layoutType {
+        case .newUser, .saveLogin:
+            return AutofillViews.saveLoginMinHeight
+        case .savePassword, .updatePassword:
+            return AutofillViews.savePasswordMinHeight
+        case .updateUsername:
+            return AutofillViews.updateUsernameMinHeight
+        }
+    }
+
+    var contentHeight: CGFloat = AutofillViews.updateUsernameMinHeight {
+        didSet {
+            guard contentHeight != oldValue else { return }
+            delegate?.saveLoginViewModelDidResizeContent(self, contentHeight: max(contentHeight, minHeight))
+        }
+    }
 
     var accountDomain: String {
         credentialManager.accountDomain
@@ -73,11 +93,15 @@ final class SaveLoginViewModel: ObservableObject {
     var hiddenPassword: String {
         PasswordHider(password: credentialManager.visiblePassword).hiddenPassword
     }
-    
+
     var username: String {
+        credentialManager.username
+    }
+
+    var usernameTruncated: String {
         AutofillInterfaceEmailTruncator.truncateEmail(credentialManager.username, maxLength: 36)
     }
-    
+
     lazy var layoutType: SaveLoginView.LayoutType = {
         if let attributedLayoutType = attributedLayoutType {
             return attributedLayoutType
@@ -97,10 +121,6 @@ final class SaveLoginViewModel: ObservableObject {
         
         if isUpdatingPassword {
             return .updatePassword
-        }
-
-        if credentialManager.hasOtherCredentialsOnSameDomain {
-            return .saveAdditionalLogin
         }
 
         return .saveLogin
@@ -160,5 +180,11 @@ final class SaveLoginViewModel: ObservableObject {
         didSave = true
         autofillFirstTimeUser = false
         delegate?.saveLoginViewModelDidSave(self)
+    }
+
+    func neverPrompt() {
+        didSave = true
+        autofillFirstTimeUser = false
+        delegate?.saveLoginViewModelNeverPrompt(self)
     }
 }

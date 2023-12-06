@@ -18,7 +18,7 @@
 //
 
 import WebKit
-import os.log
+import Common
 import Core
 import BrowserServicesKit
 import UserScript
@@ -235,7 +235,8 @@ extension AutoconsentUserScript {
             return
         }
 
-        guard config.isFeature(.autoconsent, enabledForDomain: url.host) else {
+        let topURLDomain = message.webView?.url?.host
+        guard config.isFeature(.autoconsent, enabledForDomain: topURLDomain) else {
             os_log("disabled for site: %s", log: .autoconsentLog, type: .info, String(describing: url.absoluteString))
             replyHandler([ "type": "ok" ], nil) // this is just to prevent a Promise rejection
             return
@@ -265,9 +266,10 @@ extension AutoconsentUserScript {
                 // the very first time (autoconsentEnabled = nil), make sure the popup is visible
                 "enablePrehide": preferences.autoconsentPromptSeen,
                 "enableCosmeticRules": true,
-                "detectRetries": 20
-            ]
-        ], nil)
+                "detectRetries": 20,
+                "isMainWorld": false
+            ] as [String: Any?]
+        ] as [String: Any?], nil)
     }
     
     @MainActor

@@ -18,12 +18,9 @@
 //
 
 import Foundation
-import os.log
 import BrowserServicesKit
 import Common
 import Networking
-
-// swiftlint:enable type_body_length
 
 public struct PixelParameters {
     public static let url = "url"
@@ -98,6 +95,7 @@ public struct PixelParameters {
     public static let bookmarkCount = "bco"
     
     public static let isBackgrounded = "is_backgrounded"
+    public static let isDataProtected = "is_data_protected"
     
     public static let isInternalUser = "is_internal_user"
     
@@ -109,7 +107,25 @@ public struct PixelParameters {
 
     public static let bookmarkErrorOrphanedFolderCount = "bookmark_error_orphaned_count"
 
-    public static let ctaShown = "cta"
+    // Remote messaging
+    public static let message = "message"
+    public static let sheetResult = "success"
+
+    // Network Protection
+    public static let keychainFieldName = "fieldName"
+    public static let keychainErrorCode = errorCode
+    public static let wireguardErrorCode = errorCode
+    public static let latency = "latency"
+    public static let server = "server"
+    public static let networkType = "network_type"
+    public static let function = "function"
+    public static let line = "line"
+    public static let reason = "reason"
+  
+    // Return user
+    public static let returnUserErrorCode = "error_code"
+    public static let returnUserOldATB = "old_atb"
+    public static let returnUserNewATB = "new_atb"
 }
 
 public struct PixelValues {
@@ -124,7 +140,7 @@ public class Pixel {
     }
     
     private static var isInternalUser: Bool {
-        DefaultFeatureFlagger().isInternalUser
+        DefaultInternalUserDecider(store: InternalUserStore()).isInternalUser
     }
 
     public enum QueryParameters {
@@ -139,10 +155,27 @@ public class Pixel {
                             forDeviceType deviceType: UIUserInterfaceIdiom? = UIDevice.current.userInterfaceIdiom,
                             withAdditionalParameters params: [String: String] = [:],
                             allowedQueryReservedCharacters: CharacterSet? = nil,
-                            withHeaders headers: HTTPHeaders = APIRequest.Headers().default,
+                            withHeaders headers: APIRequest.Headers = APIRequest.Headers(),
                             includedParameters: [QueryParameters] = [.atb, .appVersion],
                             onComplete: @escaping (Error?) -> Void = { _ in }) {
-        
+        fire(
+            pixelNamed: pixel.name,
+            forDeviceType: deviceType,
+            withAdditionalParameters: params,
+            allowedQueryReservedCharacters: allowedQueryReservedCharacters,
+            withHeaders: headers,
+            includedParameters: includedParameters,
+            onComplete: onComplete
+        )
+    }
+
+    public static func fire(pixelNamed pixelName: String,
+                            forDeviceType deviceType: UIUserInterfaceIdiom? = UIDevice.current.userInterfaceIdiom,
+                            withAdditionalParameters params: [String: String] = [:],
+                            allowedQueryReservedCharacters: CharacterSet? = nil,
+                            withHeaders headers: APIRequest.Headers = APIRequest.Headers(),
+                            includedParameters: [QueryParameters] = [.atb, .appVersion],
+                            onComplete: @escaping (Error?) -> Void = { _ in }) {
         var newParams = params
         if includedParameters.contains(.appVersion) {
             newParams[PixelParameters.appVersion] = AppVersion.shared.versionAndBuildNumber
@@ -153,24 +186,24 @@ public class Pixel {
         if isInternalUser {
             newParams[PixelParameters.isInternalUser] = "true"
         }
-        
+
         let url: URL
         if let deviceType = deviceType {
             let formFactor = deviceType == .pad ? Constants.tablet : Constants.phone
-            url = URL.makePixelURL(pixelName: pixel.name,
+            url = URL.makePixelURL(pixelName: pixelName,
                                    formFactor: formFactor,
                                    includeATB: includedParameters.contains(.atb))
         } else {
-            url = URL.makePixelURL(pixelName: pixel.name, includeATB: includedParameters.contains(.atb) )
+            url = URL.makePixelURL(pixelName: pixelName, includeATB: includedParameters.contains(.atb) )
         }
-        
+
         let configuration = APIRequest.Configuration(url: url,
                                                      queryParameters: newParams,
                                                      allowedQueryReservedCharacters: allowedQueryReservedCharacters,
                                                      headers: headers)
         let request = APIRequest(configuration: configuration, urlSession: .session(useMainThreadCallbackQueue: true))
         request.fetch { _, error in
-            os_log("Pixel fired %s %s", log: .generalLog, type: .debug, pixel.name, "\(params)")
+            os_log("Pixel fired %s %s", log: .generalLog, type: .debug, pixelName, "\(params)")
             onComplete(error)
         }
     }
@@ -180,24 +213,31 @@ public class Pixel {
 extension Pixel {
     
     public static func fire(pixel: Pixel.Event,
-                            error: Error,
+                            error: Error?,
+                            includedParameters: [QueryParameters] = [.appVersion],
                             withAdditionalParameters params: [String: String] = [:],
                             onComplete: @escaping (Error?) -> Void = { _ in }) {
-        let nsError = error as NSError
         var newParams = params
-        newParams[PixelParameters.errorCode] = "\(nsError.code)"
-        newParams[PixelParameters.errorDomain] = nsError.domain
-        
-        if let underlyingError = nsError.userInfo["NSUnderlyingError"] as? NSError {
-            newParams[PixelParameters.underlyingErrorCode] = "\(underlyingError.code)"
-            newParams[PixelParameters.underlyingErrorDomain] = underlyingError.domain
-        } else if let sqlErrorCode = nsError.userInfo["NSSQLiteErrorDomain"] as? NSNumber {
-            newParams[PixelParameters.underlyingErrorCode] = "\(sqlErrorCode.intValue)"
-            newParams[PixelParameters.underlyingErrorDomain] = "NSSQLiteErrorDomain"
+        if let error {
+            newParams.appendErrorPixelParams(error: error)
         }
-        
-        fire(pixel: pixel, withAdditionalParameters: newParams, includedParameters: [], onComplete: onComplete)
+        fire(pixel: pixel, withAdditionalParameters: newParams, includedParameters: includedParameters, onComplete: onComplete)
     }
 }
 
-// swiftlint:enable file_length
+extension Dictionary where Key == String, Value == String {
+    mutating func appendErrorPixelParams(error: Error) {
+        let nsError = error as NSError
+
+        self[PixelParameters.errorCode] = "\(nsError.code)"
+        self[PixelParameters.errorDomain] = nsError.domain
+
+        if let underlyingError = nsError.userInfo["NSUnderlyingError"] as? NSError {
+            self[PixelParameters.underlyingErrorCode] = "\(underlyingError.code)"
+            self[PixelParameters.underlyingErrorDomain] = underlyingError.domain
+        } else if let sqlErrorCode = nsError.userInfo["NSSQLiteErrorDomain"] as? NSNumber {
+            self[PixelParameters.underlyingErrorCode] = "\(sqlErrorCode.intValue)"
+            self[PixelParameters.underlyingErrorDomain] = "NSSQLiteErrorDomain"
+        }
+    }
+}

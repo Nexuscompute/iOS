@@ -52,12 +52,10 @@ class BookmarkDetailsCell: UITableViewCell {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var urlTextField: UITextField!
     @IBOutlet weak var faviconImageView: UIImageView!
-    @IBOutlet weak var seperatorViewHeight: NSLayoutConstraint!
     
     func setUp() {
         selectionStyle = .none
         
-        seperatorViewHeight.constant = 1.0 / UIScreen.main.scale
         titleTextField.becomeFirstResponder()
         
         titleTextField.removeTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -73,7 +71,7 @@ class BookmarkDetailsCell: UITableViewCell {
     
     func setUrlString(_ urlString: String?) {
         let url = URL(string: urlString ?? "")
-        faviconImageView.loadFavicon(forDomain: url?.host, usingCache: .bookmarks)
+        faviconImageView.loadFavicon(forDomain: url?.host, usingCache: .fireproof)
         self.urlString = urlString
     }
     

@@ -32,23 +32,29 @@ class SuggestionTableViewCell: UITableViewCell {
     @IBOutlet weak var typeImage: UIImageView!
     @IBOutlet weak var plusButton: UIButton!
 
-    func updateFor(query: String, suggestion: Suggestion, with theme: Theme) {
+    func updateFor(query: String, suggestion: Suggestion, with theme: Theme, isAddressBarAtBottom: Bool) {
 
         switch suggestion.source {
         case .local:
-            typeImage.image = UIImage(named: "BookmarkSuggestion")
+            typeImage.image = UIImage(named: "Bookmark-20")
             self.accessibilityValue = UserText.voiceoverSuggestionTypeBookmark
         case .remote:
             if suggestion.url != nil {
-                typeImage.image = UIImage(named: "SuggestGlobe")
+                typeImage.image = UIImage(named: "Globe-20")
                 self.accessibilityValue = UserText.voiceoverSuggestionTypeWebsite
             } else {
-                typeImage.image = UIImage(named: "SuggestLoupe")
+                typeImage.image = UIImage(named: "Find-Search-20")
                 self.accessibilityValue = UserText.voiceoverSuggestionTypeSearch
             }
         }
+
         self.plusButton.accessibilityLabel = UserText.voiceoverActionAutocomplete
-        
+        if isAddressBarAtBottom {
+            self.plusButton.setImage(UIImage(named: "Arrow-Down-Left-24"), for: .normal)
+        } else {
+            self.plusButton.setImage(UIImage(named: "Arrow-Top-Left-24"), for: .normal)
+        }
+
         styleText(query: query,
                   text: suggestion.suggestion,
                   regularColor: theme.tableCellTextColor,
@@ -58,7 +64,7 @@ class SuggestionTableViewCell: UITableViewCell {
     private func styleText(query: String, text: String, regularColor: UIColor, suggestionColor: UIColor) {
 
         let regularAttributes = [
-            NSAttributedString.Key.font: UIFont.semiBoldAppFont(ofSize: 16),
+            NSAttributedString.Key.font: UIFont.appFont(ofSize: 16),
             NSAttributedString.Key.foregroundColor: regularColor
         ]
         

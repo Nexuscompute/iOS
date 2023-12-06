@@ -20,10 +20,10 @@
 import XCTest
 import Foundation
 import CoreData
-import os.log
 @testable import DuckDuckGo
 @testable import Core
 @testable import BrowserServicesKit
+@testable import RemoteMessaging
 
 class RemoteMessagingStoreTests: XCTestCase {
 
@@ -136,7 +136,9 @@ class RemoteMessagingStoreTests: XCTestCase {
                                                            bookmarksCount: 0,
                                                            favoritesCount: 0,
                                                            appTheme: "light",
-                                                           isWidgetInstalled: false),
+                                                           isWidgetInstalled: false,
+                                                           isNetPWaitlistUser: false,
+                                                           daysSinceNetPEnabled: -1),
                 dismissedMessageIds: []
         )
 

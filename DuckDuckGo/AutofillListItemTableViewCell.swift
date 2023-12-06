@@ -118,15 +118,11 @@ class AutofillListItemTableViewCell: UITableViewCell {
             contentStackView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
         ])
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
 
     private func setupContentView(with item: AutofillLoginListItemViewModel) {
         titleLabel.text = item.title
         subtitleLabel.text = item.subtitle
-        iconImageView.loadFavicon(forDomain: item.account.domain, usingCache: .tabs)
+        iconImageView.loadFavicon(forDomain: item.account.domain, usingCache: .fireproof, preferredFakeFaviconLetters: item.preferredFaviconLetters)
     }
     
     override func layoutSubviews() {

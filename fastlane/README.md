@@ -29,6 +29,14 @@ Fetches and updates certificates and provisioning profiles for App Store distrib
 
 Fetches and updates certificates and provisioning profiles for Ad-Hoc distribution
 
+### sync_signing_alpha
+
+```sh
+[bundle exec] fastlane sync_signing_alpha
+```
+
+Fetches and updates certificates and provisioning profiles for Alpha distribution
+
 ### adhoc
 
 ```sh
@@ -60,6 +68,14 @@ Updates App Store metadata
 ```
 
 Makes App Store release build and uploads it to TestFlight
+
+### release_alpha
+
+```sh
+[bundle exec] fastlane release_alpha
+```
+
+Makes Alpha release build and uploads it to TestFlight
 
 ### increment_build_number_for_version
 
