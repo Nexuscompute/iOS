@@ -2,7 +2,7 @@
 "%@" = "%@";
 
 /* No comment provided by engineer. */
-"%@ [%@](https://form.asana.com/?k=_wNLt6YcT5ILpQjDuW0Mxw&d=137249556945)" = "%1$@ [%2$@](https://form.asana.com/?k=_wNLt6YcT5ILpQjDuW0Mxw&d=137249556945)";
+"%@ " = "%@ ";
 
 /* Buton label for Edit action */
 "action.generic.edit" = "Editați";
@@ -15,6 +15,18 @@
 
 /* Button label for managing favorites */
 "action.manage.favorites" = "Gestionează";
+
+/* Button label for OK action */
+"action.ok" = "OK";
+
+/* Title for text zoom menu item.  %d%% is replaced with percent, e.g. 56% so do not change that please. */
+"action.text-zoom-menu-item" = "Zoom (%d%%)";
+
+/* Text zoom menu item */
+"action.text-zoom-sheet-menu-item" = "Zoom";
+
+/* Title for text zoom sheet view.  %d%% is replaced with percent, e.g. 56% so do not change that please. */
+"action.text-zoom-sheet-title" = "Zoom text (%d%%)";
 
 /* Add action - button shown in alert */
 "action.title.add" = "Adăugați";
@@ -46,6 +58,9 @@
 /* Downloads menu item opening the downlods list */
 "action.title.downloads" = "Descărcări";
 
+/* Open AI Chat action in the menu list */
+"action.title.duckai" = "Chat IA";
+
 /* Edit Bookmark action */
 "action.title.edit.bookmark" = "Editare semn de carte";
 
@@ -73,8 +88,11 @@
 /* Paste and Go action */
 "action.title.pasteAndGo" = "Lipește și pornește";
 
-/* Print action */
+/* Print action in the menu header */
 "action.title.print" = "Tipărire";
+
+/* Print action in the menu list */
+"action.title.print.site" = "Tipărire";
 
 /* Refresh action - button shown in alert */
 "action.title.refresh" = "Reîmprospătare";
@@ -119,7 +137,10 @@
 "addWidget.description" = "Obține acces rapid la căutarea privată și la site-urile care îți plac.";
 
 /* No comment provided by engineer. */
-"addWidget.settings.firstParagraph" = "Ține apăsat pe ecranul de întâmpinare pentru a intra în modul în care elementele „tremură”.";
+"addWidget.settings.firstParagraph" = "Ține apăsat oriunde pe ecranul de pornire până când aplicațiile încep să tremure.";
+
+/* No comment provided by engineer. */
+"addWidget.settings.secondParagraph" = "Apasă butonul **Editează**, apoi alege **Adaugă widget**";
 
 /* Replacement string is a plus button icon. */
 "addWidget.settings.secondParagraph.%@" = "Atinge butonul plus %@.";
@@ -133,14 +154,20 @@
 /* No comment provided by engineer. */
 "alert.message.bookmarkAll" = "Marcajele existente nu vor fi duplicate.";
 
+/* Description for alert shown when sync error occurs because of bad bookmarks data */
+"alert.sync-bookmarks-bad-data-error-description" = "Unele semne de carte sunt formatate incorect sau sunt prea lungi și nu au fost sincronizate.";
+
 /* Description for alert shown when sync bookmarks paused for too many items */
-"alert.sync-bookmarks-paused-description" = "Ai depășit limita de sincronizare a marcajelor. Încearcă să ștergi unele marcaje. Până la rezolvarea acestei probleme, nu se va efectua copierea de rezervă pentru marcajele tale.";
+"alert.sync-bookmarks-paused-description" = "Ai atins numărul maxim de marcaje. Șterge câteva marcaje pentru a relua sincronizarea.";
 
 /* Title for alert shown when sync bookmarks paused for too many items */
 "alert.sync-bookmarks-paused-title" = "Sincronizarea marcajelor este întreruptă";
 
+/* Description for alert shown when sync error occurs because of bad credentials data */
+"alert.sync-credentials-bad-data-error-description" = "Unele parole sunt formatate incorect sau sunt prea lungi și nu au fost sincronizate.";
+
 /* Description for alert shown when sync credentials paused for too many items */
-"alert.sync-credentials-paused-description" = "Ai depășit limita de sincronizare a parolelor. Încearcă să ștergi câteva parole. Până la rezolvarea acestei probleme, nu se va efectua copierea de rezervă pentru parolele tale.";
+"alert.sync-credentials-paused-description" = "Ai atins numărul maxim de parole. Șterge câteva parole pentru a relua sincronizarea.";
 
 /* Title for alert shown when sync credentials paused for too many items */
 "alert.sync-credentials-paused-title" = "Sincronizarea parolelor este întreruptă";
@@ -148,11 +175,38 @@
 /* Title for sync error alert */
 "alert.sync-error" = "Eroare de sincronizare și backup";
 
+/* Sync error alert action button title, takes the user to the sync settings page. */
+"alert.sync-error-action" = "Setări de sincronizare";
+
+/* Description for alert shown when user logged off from sync */
+"alert.sync-invalid-login-error-description" = "Sincronizarea a fost întreruptă. Dacă dorești să continui sincronizarea acestui dispozitiv, reconectează-te folosind un alt dispozitiv sau codul de recuperare.";
+
 /* Learn more button in alert */
 "alert.sync-paused-alert-learn-more-button" = "Află mai multe";
 
 /* Confirmation button in alert */
 "alert.sync-paused-alert-ok-button" = "OK";
+
+/* Title for alert shown when sync paused for an error */
+"alert.sync-paused-title" = "Sincronizarea este întreruptă";
+
+/* Switch account button in alert */
+"alert.sync-switch-account-button" = "Comută sincronizarea";
+
+/* Description for switching sync accounts when there's two */
+"alert.sync-switch-account-message" = "Acest dispozitiv este deja sincronizat, sigur dorești să-l sincronizezi cu o altă copie de rezervă sau alt dispozitiv? Schimbarea nu va șterge datele deja sincronizate cu acest dispozitiv.";
+
+/* Switch account title in alert */
+"alert.sync-switch-account-title" = "Treci la o altă sincronizare?";
+
+/* Description for alert shown when sync error occurs because of too many requests */
+"alert.sync-too-many-requests-error-description" = "Sync & Backup sunt temporar indisponibile.";
+
+/* Title of the warning message that tells the user that there was an error with the sync feature. */
+"alert.sync.warning.sync-error" = "Eroare de sincronizare";
+
+/* Title of the warning message */
+"alert.sync.warning.sync-paused" = "Sincronizarea și copierea de rezervă este întreruptă";
 
 /* Question from confirmation dialog */
 "alert.title.bookmarkAll" = "Marchezi toate filele?";
@@ -196,225 +250,6 @@
 /* Shown on authentication screen */
 "app.authentication.unlock" = "Deblochează DuckDuckGo.";
 
-/* First part of about page content (note the trailing space) */
-"appTP.about.content1" = "You’ve probably heard about companies like Google and Facebook tracking you behind the scenes on third-party websites. But did you know they also track your personal information through apps on your device?\n\nIn 2022, DuckDuckGo found that ";
-
-/* Second part of about page content (note the trailing space) */
-"appTP.about.content2" = "over 85% of free iOS apps tested contained hidden trackers from other companies.";
-
-/* Third part of about page content (note the leading space) */
-"appTP.about.content3" = " Of the 395 apps tested, 60% sent data to Google. This happens even while you’re not using your device.\n\nTrackers in apps may have access to a lot more information than their website tracker cousins, such as your location down to which floor of a building you're on, how often you play games while at work, and when and how long you sleep each day. Even if you haven’t given apps explicit permission to collect data, they can still take it without your knowledge.\n\nTracking networks like Facebook and Google use these little pieces of information to build a digital profile about you. With it, tracking networks can manipulate what you see online and allow advertisers to bid on access to you based on your data.\n\nTrackers in apps is a BIG problem for privacy. But DuckDuckGo has a solution that can help.\n\nWhen enabled in the DuckDuckGo Privacy Browser app, App Tracking Protection blocks many trackers in other apps, not just the trackers we find on websites when you browse. These dual layers of protection reduce what companies know about you overall, so you can use your apps with more peace of mind, knowing you’re more protected.";
-
-/* Navigation Title for AppTP about page */
-"appTP.about.navTitle" = "About App Trackers";
-
-/* Title for AppTP about page */
-"appTP.about.title" = "What Are App Trackers?";
-
-/* Title for 'Report an Issue' button in the activity view. */
-"appTP.activityView.reportIssue" = "Report Issue";
-
-/* Text label for switch that turns blocking on or off for a tracker */
-"appTP.blockTrackerText" = "Block this Tracker";
-
-/* Detail string describing what AppTP is */
-"appTP.cell.detail" = "Blochează tehnologiile de urmărire pe dispozitivul tău";
-
-/* String indicating AppTP is disabled when viewed from the settings screen */
-"appTP.cell.disabled" = "Dezactivat";
-
-/* String indicating AppTP is enabled when viewed from the settings screen */
-"appTP.cell.enabled" = "Activat";
-
-/* Info string informing the user what App Tracking Protection does. */
-"appTP.empty.disabled.info" = "Activează App Tracking Protection pentru a putea bloca tehnologiile de urmărire deranjante din alte aplicații.";
-
-/* Info string informing the user we're looking for trackers in other apps. */
-"appTP.empty.enabled.heading" = "We’re blocking hidden trackers";
-
-/* Info string informing the user we're looking for trackers in other apps. */
-"appTP.empty.enabled.info" = "Come back soon to see a list of all the app trackers we’ve blocked.";
-
-/* First answer for AppTP FAQ page */
-"appTP.faq.answer1" = "App Tracking Protection blocks app trackers from other companies, like when Facebook tries to track you in a banking app. Companies may still track you in apps they own.";
-
-/* Second answer for AppTP FAQ page */
-"appTP.faq.answer2" = "Yes! App Tracking Protection works across all apps on your device to block the most common hidden trackers we find trying to collect your personal info.";
-
-/* Third answer for AppTP FAQ page */
-"appTP.faq.answer3" = "We currently only block the most common trackers that we find on iOS. This helps us to comprehensively test App Tracking Protection and lower frequency of app breakage, while blocking up to 70% of all tracking requests.";
-
-/* Fourth answer for AppTP FAQ page */
-"appTP.faq.answer4" = "You’ll be asked to set up a virtual private network (VPN) connection, but you don't need to install a VPN app for App Tracking Protection to work.\n\nThis permission, which works only on your device, allows App Tracking Protection to monitor network traffic so that it can block known trackers.";
-
-/* Fifth answer for AppTP FAQ page */
-"appTP.faq.answer5" = "You can use App Tracking Protection at the same time as using an IKEv2 protocol VPN app on an iOS device. You won’t be able to use App Tracking Protection on an iOS device if you’re using a VPN app that uses a different type of protocol, like WireGuard or OpenVPN type VPNs.";
-
-/* Sixth answer for AppTP FAQ page */
-"appTP.faq.answer6" = "A VPN sends your data from the device to its own server, where it secures and anonymizes your data from prying eyes. However, this allows the VPN company to see your network traffic.\n\nApp Tracking Protection is different. Instead of sending your data to a VPN server, App Tracking Protection works only on your device, sitting between your apps and the servers they talk to.\n\nWhenever App Tracking Protection recognizes a known tracker, it blocks the tracker from sending personal information (such as your IP address, activity, and device details) off your device. All other traffic reaches its destination, so your apps work normally.";
-
-/* Seventh answer for AppTP FAQ page */
-"appTP.faq.answer7" = "App Tracking Protection works only on your device and doesn’t send your data off your device to DuckDuckGo. We don’t collect or store any data from your apps.";
-
-/* First question for AppTP FAQ page */
-"appTP.faq.question1" = "How does App Tracking Protection work?";
-
-/* Second question for AppTP FAQ page */
-"appTP.faq.question2" = "Does App Tracking Protection block trackers in all apps on my device?";
-
-/* Third question for AppTP FAQ page */
-"appTP.faq.question3" = "Does App Tracking Protection block all app trackers?";
-
-/* Fourth question for AppTP FAQ page */
-"appTP.faq.question4" = "Why does App Tracking Protection use a VPN connection?";
-
-/* Fifth question for AppTP FAQ page */
-"appTP.faq.question5" = "Will App Tracking Protection work if I also use a VPN app?";
-
-/* Sixth question for AppTP FAQ page */
-"appTP.faq.question6" = "How is App Tracking Protection different from a VPN?";
-
-/* Seventh question for AppTP FAQ page */
-"appTP.faq.question7" = "Is my data private?";
-
-/* Title for AppTP FAQ page */
-"appTP.faq.title" = "App Tracking Protection FAQ";
-
-/* Do not translate. StringsDict entry -- Count part of string 'App Tracking Protection blocked x tracking attempts today' */
-"appTP.home.blockedCount" = "appTP.home.blockedCount";
-
-/* Prefix of string 'App Tracking Protection blocked x tracking attempts today' (note the trailing space) */
-"appTP.home.blockedPrefix" = "App Tracking Protection a blocat ";
-
-/* Prefix of string 'App Tracking Protection blocked x tracking attempts today' (note the leading space) */
-"appTP.home.blockedSuffix" = " în aplicațiile tale astăzi.";
-
-/* Prefix of string 'App Tracking Protection disabled. Tap to re-enable.' (note the trailing space) */
-"appTP.home.disabledPrefix" = "App Tracking Protection disabled. ";
-
-/* Suffix of string 'App Tracking Protection disabled. Tap to re-enable.' */
-"appTP.home.disabledSuffix" = "Tap to continue blocking tracking attempts across your apps.";
-
-/* Text indicating the tracking event occured 'just now'. Example: Last attempt 'just now' */
-"appTP.justNow" = "Chiar acum";
-
-/* View to manage trackers for AppTP. Allows the user to turn trackers on or off. */
-"appTP.manageTrackers" = "Gestionează tehnologiile de urmărire";
-
-/* Button title for AppTP onboarding */
-"appTP.onboarding.continueButton" = "Continue";
-
-/* Button title for AppTP onboarding to enable AppTP */
-"appTP.onboarding.enableeButton" = "Enable App Tracking Protection";
-
-/* Button title for AppTP onboarding to learn more about AppTP */
-"appTP.onboarding.learnMoreButton" = "Learn More";
-
-/* First part of info on the first AppTP onboarding page */
-"appTP.onboarding.page1Info1" = "Over 85% of free iOS apps";
-
-/* Second part of info on the first AppTP onboarding page (note the leading space) */
-"appTP.onboarding.page1Info2" = " we’ve tested allow other companies to track your personal information, even when you’re sleeping.";
-
-/* Third part of info on the first AppTP onboarding page */
-"appTP.onboarding.page1Info3" = "See who we catch trying to track you in your apps and take back control.";
-
-/* First part of info on the second AppTP onboarding page (note the trailing space) */
-"appTP.onboarding.page2Info1" = "App Tracking Protection ";
-
-/* Second part of info on the second AppTP onboarding page */
-"appTP.onboarding.page2Info2" = "detects and blocks app trackers from other companies,";
-
-/* Third part of info on the second AppTP onboarding page (note the leading space) */
-"appTP.onboarding.page2Info3" = " like when Google attempts to track you in a health app.";
-
-/* Fourth part of info on the second AppTP onboarding page */
-"appTP.onboarding.page2Info4" = "It’s free,";
-
-/* Fifth part of info on the second AppTP onboarding page (note the leading and trailing space) */
-"appTP.onboarding.page2Info5" = " and you can enjoy your apps as you normally would. Working in the background, it helps ";
-
-/* Sixth part of info on the second AppTP onboarding page */
-"appTP.onboarding.page2Info6" = "protect you night and day.";
-
-/* First part of info on the third AppTP onboarding page */
-"appTP.onboarding.page3Info1" = "App Tracking Protection is not a VPN.";
-
-/* Second part of info on the third AppTP onboarding page (note the leading space) */
-"appTP.onboarding.page3Info2" = " However, your device will recognize it as one. This is because it uses a local VPN connection to work.";
-
-/* Third part of info on the third AppTP onboarding page (note the trailing space) */
-"appTP.onboarding.page3Info3" = "App Tracking Protection is different. ";
-
-/* Fourth part of info on the third AppTP onboarding page */
-"appTP.onboarding.page3Info4" = "It never routes app data through an external server.";
-
-/* Title for first AppTP onboarding page */
-"appTP.onboarding.title1" = "One easy step for better app privacy!";
-
-/* Title for second AppTP onboarding page */
-"appTP.onboarding.title2" = "How does it work?";
-
-/* Title for third AppTP onboarding page */
-"appTP.onboarding.title3" = "Who sees your data?";
-
-/* Breakage report app name label */
-"appTP.report.appLabel" = "Which app is having issues?";
-
-/* Breakage report app name placeholder */
-"appTP.report.appPlaceholder" = "App name";
-
-/* Breakage report category label */
-"appTP.report.categoryLabel" = "Ce se întâmplă?";
-
-/* Breakage report comment label */
-"appTP.report.commentLabel" = "Comments";
-
-/* Breakage report comment placeholder */
-"appTP.report.commentPlaceholder" = "Add additional details";
-
-/* Breakage report footer explaining what is collected in the breakage report */
-"appTP.report.footer" = "In addition to the details entered into this form, your app issue report will contain:\n• A list of trackers blocked in the last 10 min\n• Whether App Tracking Protection is enabled\n• Aggregate DuckDuckGo app diagnostics";
-
-/* Breakage report submit button */
-"appTP.report.submit" = "Trimite";
-
-/* Breakage report form title */
-"appTP.report.title" = "Report Issue";
-
-/* Breakage report succcess message */
-"appTP.report.toast" = "Mulțumesc! Feedback trimis.";
-
-/* Cancel button for 'Report an Issue' alert. */
-"appTP.reportAlert.cancel" = "Nu acum";
-
-/* Confirm button for 'Report an Issue' alert. */
-"appTP.reportAlert.confirm" = "Raportează problema";
-
-/* Message for 'Report an Issue' alert. */
-"appTP.reportAlert.message" = "Let us know if you disabled App Tracking Protection for this specific tracker because it caused app issues. Your feedback helps us improve!";
-
-/* Title for 'Report an Issue' alert. */
-"appTP.reportAlert.title" = "Report Issue?";
-
-/* Toast notification diplayed after restoring the blocklist to default settings */
-"appTP.restoreDefaultsToast" = "Default settings restored";
-
-/* Button to restore the blocklist to its default state. */
-"appTP.restoreDefualts" = "Restabilește valorile implicite";
-
-/* Title for the App Tracking Protection feature */
-"appTP.title" = "Protecția la urmărirea aplicațiilor";
-
-/* Text indicating when the tracker was last allowed. Example: Last attempt allowed (timeString) */
-"appTP.trackerAllowedTimestamp" = "Ultima încercare a fost permisă la %@";
-
-/* Text indicating when the tracker was last blocked. Example: Last attempt blocked (timeString) */
-"appTP.trackerBlockedTimestamp" = "Ultima încercare a fost blocată la %@";
-
-/* Do not translate. StringsDict entry -- Subtitle for tracking attempts in App Tracking Protection Activity View. Example: (count) tracking attempts */
-"appTP.trackingattempts" = "appTP.trackingattempts";
-
 /* Authentication Alert Sign In Button */
 "auth.alert.login.button" = "Autentificare";
 
@@ -439,6 +274,18 @@
 /* No comment provided by engineer. */
 "autoclear.on" = "Activat";
 
+/* Subtitle for search history items */
+"autocomplete.history.search.duckduckgo" = "Căutare DuckDuckGo";
+
+/* The message text shown in suggestions */
+"autocomplete.history.warning.message" = "Sugestiile de căutare includ acum site-urile accesate recent. Dezactivează-le din Setări sau șterge-le în orice moment cu ajutorul Fire Button 🔥.";
+
+/* Title for message show in suggestions */
+"autocomplete.history.warning.title" = "Aceeași confidențialitate.\nSugestii de căutare mai bune!";
+
+/* Switch to tab hint */
+"autocomplete.switch.to.tab" = "Comutați la filă";
+
 /* Autoconsent for Cookie Management Setting state */
 "autoconsent.disabled" = "Dezactivat";
 
@@ -460,23 +307,59 @@
 /* Do not translate - stringsdict entry */
 "autofill.delete.all.passwords.sync.confirmation.body" = "autofill.delete.all.passwords.sync.confirmation.body";
 
+/* Open Settings action for disabling autofill in Settings */
+"autofill.disable.prompt.action.open-settings" = "Deschide Setări";
+
+/* Message for informing user that they can disable autofill in Settings */
+"autofill.disable.prompt.message" = "Poți dezactiva oricând salvarea parolelor.";
+
 /* Text link to email protection website */
 "autofill.enable.email.protection" = "Activează Email Protection";
 
 /* Accessibility title for a Hide Password button replacing displayed password with ***** */
 "autofill.hide-password" = "Ascunde parola";
 
+/* Button label to get link to download the desktop browser */
+"autofill.import.passwords.get-browser-button" = "Obține browserul pentru desktop";
+
+/* Step 1 for instructions to import passwords */
+"autofill.import.passwords.instructions.step1" = "Deschide DuckDuckGo pe Mac sau Windows";
+
+/* Step 2 for instructions to import passwords. This reads as 'Go to Settings > Passwords' */
+"autofill.import.passwords.instructions.step2" = "Accesează %1$@ > %2$@";
+
+/* second parameter for autofill.import.passwords.instructions.step2 */
+"autofill.import.passwords.instructions.step2.passwords" = "Parole";
+
+/* first parameter for autofill.import.passwords.instructions.step2 */
+"autofill.import.passwords.instructions.step2.settings" = "Setări";
+
+/* Step 3 for instructions to import passwords. This reads as 'Select Import Passwords and follow the steps' */
+"autofill.import.passwords.instructions.step3" = "Selectează %@ și urmează pașii pentru a importa";
+
+/* Parameter for autofill.import.passwords.instructions.step3 */
+"autofill.import.passwords.instructions.step3.import" = "Importă parolele...";
+
+/* Step 4 for instructions to import passwords: Once imported on your computer you can set up sync on this iPhone|iPad|device */
+"autofill.import.passwords.instructions.step4" = "Odată importate pe computer, poți configura sincronizarea pe acest %@";
+
+/* Title for section with instructions to import passwords */
+"autofill.import.passwords.instructions.title" = "Importă din browserul desktop:";
+
+/* Subtitle for screen to import passwords */
+"autofill.import.passwords.subtitle" = "Importă parolele în versiunea desktop a browserului DuckDuckGo, apoi sincronizează-le între dispozitive.";
+
+/* Button label to sync passwords with desktop browser */
+"autofill.import.passwords.sync-button" = "Sincronizare cu computerul desktop";
+
+/* Title for screen to import passwords */
+"autofill.import.passwords.title" = "Cum să imporți parolele";
+
 /* Disable action for alert when asking the user if they want to keep using autofill */
 "autofill.keep-enabled.alert.disable" = "Dezactivează";
 
-/* Confirm action for alert when asking the user if they want to keep using autofill */
-"autofill.keep-enabled.alert.keep-using" = "Continuă să salvezi";
-
-/* Message for alert when asking the user if they want to keep using autofill */
-"autofill.keep-enabled.alert.message" = "Poți dezactiva oricând acest lucru din Setări.";
-
-/* Title for alert when asking the user if they want to keep using autofill */
-"autofill.keep-enabled.alert.title" = "Dorești să continui să salvezi parolele?";
+/* A link that takes the user to the DuckDuckGo help pages explaining password managers */
+"autofill.learn.more.link.title" = "Află mai multe";
 
 /* Button displayed after saving/updating an autofill login that takes the user to the saved login */
 "autofill.login-save-action-button.toast" = "Vezi";
@@ -568,8 +451,11 @@
 /* Username label for login details on autofill */
 "autofill.logins.details.username" = "Nume utilizator";
 
-/* Subtitle for view displayed when autofill has no items */
-"autofill.logins.empty-view.subtitle" = "Parolele sunt stocate în siguranță pe dispozitivul tău.";
+/* Title for button to Import Passwords when autofill has no items */
+"autofill.logins.empty-view.button.title" = "Importă parolele";
+
+/* Subtitle for view displayed when no autofill passwords have been saved */
+"autofill.logins.empty-view.subtitle.first.paragraph" = "Poți importa parolele salvate dintr-un alt browser în DuckDuckGo.";
 
 /* Title for view displayed when autofill has no items */
 "autofill.logins.empty-view.title" = "Nici o parolă nu a fost salvată încă";
@@ -588,6 +474,9 @@
 
 /* Title for a toggle that enables autofill */
 "autofill.logins.list.enable" = "Salvează și completează automat parolele";
+
+/* Footer label displayed below table section with option to enable autofill */
+"autofill.logins.list.enable.footer" = "Parolele sunt stocate în siguranță pe dispozitivul tău.";
 
 /* Toast message when a login item is deleted */
 "autofill.logins.list.login-deleted-message" = "Parola pentru %@ a fost ștearsă";
@@ -610,6 +499,12 @@
 /* Placeholder for search field on autofill login listing */
 "autofill.logins.list.search-placeholder" = "Caută parole";
 
+/* Subtext under Autofill Settings briefly explaining security to alleviate user concerns. */
+"autofill.logins.list.settings.footer.fallback" = "Parolele sunt criptate. Nimeni în afară de tine nu le poate vedea, nici măcar noi.";
+
+/* Subtext under Autofill Settings briefly explaining security to alleviate user concerns. Has a URL link by clicking Learn More. */
+"autofill.logins.list.settings.footer.markdown" = "Parolele sunt criptate. Nimeni în afară de tine nu le poate vedea, nici măcar noi. [Află mai multe](ddgQuickLink://duckduckgo.com/duckduckgo-help-pages/sync-and-backup/password-manager-security/)";
+
 /* Section title for group of suggested saved logins */
 "autofill.logins.list.suggested" = "Sugerat";
 
@@ -626,7 +521,7 @@
 "autofill.logins.prompt.auth.cancel" = "Renunță";
 
 /* Reason for auth during login prompt */
-"autofill.logins.prompt.auth.reason" = "Deblochează pentru a utiliza parola salvată";
+"autofill.logins.prompt.auth.reason" = "Deblochează dispozitivul pentru a utiliza parola salvată";
 
 /* Title for section of autofill logins that are an exact match to the current website */
 "autofill.logins.prompt.exact.match.title" = "De pe acest site web";
@@ -651,6 +546,37 @@
 
 /* Do not translate - stringsdict entry */
 "autofill.number.of.passwords" = "autofill.number.of.passwords";
+
+/* Description of autofill onboarding prompt's secure storage feature
+   Description of autofill onboarding prompt's secure storage feature with a string describing the available biometry + passcode as a parameter */
+"autofill.onboarding.key-features.secure-storage.description" = "Parolele sunt criptate, stocate pe dispozitiv și blocate cu %@.";
+
+/* Parameter for the description of autofill onboarding prompt's secure storage feature describing Face ID biometry + passcode */
+"autofill.onboarding.key-features.secure-storage.description.parameter.face-id" = "Identificator facial sau cod de acces";
+
+/* Parameter for the description of autofill onboarding prompt's secure storage feature describing passcode only if no biometry are available */
+"autofill.onboarding.key-features.secure-storage.description.parameter.passcode" = "cod de acces";
+
+/* Parameter for the description of autofill onboarding prompt's secure storage feature describing Touch ID biometry + passcode */
+"autofill.onboarding.key-features.secure-storage.description.parameter.touch-id" = "Identificator tactil sau cod de acces";
+
+/* Title of autofill onboarding prompt's secure storage feature */
+"autofill.onboarding.key-features.secure-storage.title" = "Stocare securizată";
+
+/* Description of autofill onboarding prompt's sign-in feature */
+"autofill.onboarding.key-features.sign-ins.description" = "Nu este nevoie să ții minte informațiile de conectare.";
+
+/* Title of autofill onboarding prompt's sign-in feature */
+"autofill.onboarding.key-features.sign-ins.title" = "Conectări rapide și ușoare";
+
+/* Description of autofill onboarding prompt's sync feature */
+"autofill.onboarding.key-features.sync.description" = "Criptare de la un capăt la altul și configurare ușoară atunci când ești gata.";
+
+/* Title of autofill onboarding prompt's sync feature */
+"autofill.onboarding.key-features.sync.title" = "Sincronizare între dispozitive";
+
+/* Title of autofill onboarding prompt's features list */
+"autofill.onboarding.key-features.title" = "Caracteristici principale";
 
 /* Subtitle for prompt to use suggested strong password for creating a login */
 "autofill.password-generation-prompt.subtitle" = "Parolele sunt stocate în siguranță pe dispozitivul tău.";
@@ -697,20 +623,41 @@
 /* CTA displayed on modal asking if the user never wants to be prompted to save a login for this website agin */
 "autofill.save-login.never-prompt.CTA" = "Nu solicita niciodată pentru acest site";
 
-/* Message displayed on modal asking for the user to save the login for the first time */
-"autofill.save-login.new-user.message" = "Parolele sunt stocate în siguranță pe dispozitivul tău.";
-
 /* Title displayed on modal asking for the user to save the login for the first time */
-"autofill.save-login.new-user.title" = "Dorești ca DuckDuckGo să-ți salveze parola?";
+"autofill.save-login.new-user.title" = "Dorești să salvezi această parolă?";
 
-/* Cancel CTA displayed on modal asking for the user to save the login */
-"autofill.save-login.not-now.CTA" = "Nu salva";
+/* CTA displayed on modal asking if the user wants to dismiss the save login action for now */
+"autofill.save-login.no-thanks.CTA" = "Nu, mulțumesc";
+
+/* Message displayed on modal asking for the user to save the login for the first time */
+"autofill.save-login.security.message" = "Stochează în siguranță parola pe dispozitiv, cu Parole și completare automată DuckDuckGo.";
 
 /* Title displayed on modal asking for the user to save the login */
 "autofill.save-login.title" = "Salvezi parola?";
 
 /* Confirm CTA displayed on modal asking for the user to save the password */
 "autofill.save-password.save.CTA" = "Salvează parola";
+
+/* Title for the button to report that autofill is not working on a site in autofill settings */
+"autofill.settings.report.not.working.button.title" = "Raportează o problemă cu completarea automată";
+
+/* Button title for the confirmation prompt when reporting autofill is not working for a website */
+"autofill.settings.report.not.working.confirmation.button" = "Trimite raportul";
+
+/* Message for the confirmation prompt when reporting autofill is not working for a website */
+"autofill.settings.report.not.working.confirmation.message" = "Sesizările trimise către DuckDuckGo sunt anonime și nu includ numele tău de utilizator, parola sau orice alte informații de identificare personală.\n\nSesizarea include doar URL-ul site-ului și starea unor setări de completare automată.";
+
+/* Title for the confirmation prompt when reporting autofill is not working for a website */
+"autofill.settings.report.not.working.confirmation.title" = "Raportezi că completarea automată nu funcționează pe %@?";
+
+/* Message shown to user when they submit a report that autofill is not working for a website */
+"autofill.settings.report.not.working.sent.confirmation" = "Mulțumim! Sesizarea ta ne va ajuta să îmbunătățim DuckDuckGo pentru toată lumea.";
+
+/* Subtitle for the row to report that autofill is not working on a site in autofill settings */
+"autofill.settings.report.not.working.subtitle" = "Raportează anonim că completarea automată nu funcționează pe acest site. Parolele nu sunt niciodată comunicate.";
+
+/* Title for the row to report that autofill is not working on a site in autofill settings */
+"autofill.settings.report.not.working.title" = "Completarea automată nu funcționează?";
 
 /* Accessibility title for a Show Password button displaying actial password instead of ***** */
 "autofill.show-password" = "Arată parola";
@@ -752,7 +699,7 @@
 "bookmark.delete.alert.message" = "Aceasta va șterge marcajul tău pentru „%@”";
 
 /* Delete bookmark alert title */
-"bookmark.delete.alert.title" = "Delete?";
+"bookmark.delete.alert.title" = "Dorești să ștergi?";
 
 /* The message shown after a bookmark has been deleted */
 "bookmark.deleted.toast" = "Marcaj șters";
@@ -780,6 +727,9 @@
 
 /* More options button text */
 "bookmark.moreButton" = "Mai Multe";
+
+/* Placeholder in the bookmarks search bar */
+"bookmark.searchbar.placeholder" = "Caută";
 
 /* Placeholder in the add bookmark form */
 "bookmark.title.placeholder" = "Titlul site-ului web";
@@ -823,8 +773,134 @@
 /* Title of prompt for users where they can choose to import or export an HTML file containing webpage bookmarks */
 "bookmarks.importExport.title" = "Importă un fișier HTML sau marcaje dintr-un alt browser sau exportă marcajele tale existente.";
 
+/* Button to open report form */
+"broken.site.report.menu.title" = "Raportează o problemă cu acest site";
+
+/* Acknowledge button */
+"broken.site.report.missing.description.alert.button" = "Am înțeles";
+
+/* It appears as an alert after user tries to send a report without submitting any details */
+"broken.site.report.missing.description.alert.description" = "Descrie problema pe care ai întâmpinat-o pe acest site pentru a înțelege mai bine cum să o rezolvăm.";
+
+/* It appears as an alert after user tries to send a report without submitting any details */
+"broken.site.report.missing.description.alert.title" = "Descriere necesară";
+
+/* Message that appears after submitting report */
+"broken.site.report.success.toast" = "Sesizarea ta ajută la îmbunătățirea DuckDuckGo pentru toată lumea!";
+
 /* No comment provided by engineer. */
-"bucket: %@" = "bucket: %@";
+"Confirm" = "Confirmare";
+
+/* Button to continue the onboarding process */
+"contextual.onboarding.addToDock.buttons.skip" = "Ignorare";
+
+/* Button on the last screen of the onboarding, it will dismiss the onboarding screen. */
+"contextual.onboarding.addToDock.buttons.startBrowsing" = "Începe navigarea";
+
+/* Button of the onboarding dialog. On click it shows a dialog with a tutorial video about how to add the DDG browser icon to the device dock. */
+"contextual.onboarding.addToDock.buttons.tutorial" = "Arată-mi cum";
+
+/* Message of the last screen of the onboarding that promotes adding the DDG browser icon to the dock. */
+"contextual.onboarding.addToDock.promo.contextual.message" = "Reține, de fiecare dată când navighezi cu mine, o reclamă sinistră își pierde aripile.\n\nAșa că ține-mă în rândul de jos de pictograme pentru a naviga zilnic.";
+
+/* The message of the onboarding dialog popup that promotes adding the DDG browser icon to the dock. */
+"contextual.onboarding.addToDock.promo.intro.message" = "Îmi voi face cuibul la îndemână, pentru toată navigarea ta zilnică.";
+
+/* The title of the onboarding dialog popup that promotes adding the DDG browser icon to the dock. */
+"contextual.onboarding.addToDock.promo.title" = "Adaugă-mă în rândul tău de jos de pictograme!";
+
+/* The message of the onboarding dialog popup that explains how to add the DDG browser icon to the dock. */
+"contextual.onboarding.addToDock.tutorial.message" = "Găsește pictograma DuckDuckGo pe ecranul de pornire. Apoi apas-o și trage-o în poziție. Gata!";
+
+/* The title of the onboarding dialog popup that explains how to add the DDG browser icon to the dock. */
+"contextual.onboarding.addToDock.tutorial.title" = "Este simplu să mă adaugi în rândul de jos de pictograme.";
+
+/* First parameter is a count of additional trackers, second and third are names of the tracker networks (strings) */
+"contextual.onboarding.browsing.multiple.trackers" = "contextual.onboarding.browsing.multiple.trackers";
+
+/* Parameter is domain name (string) */
+"contextual.onboarding.browsing.one.tracker" = "*%1$@* a încercat să te urmărească aici. I-am blocat!\n\n☝️ Atinge scutul pentru mai multe informații.";
+
+/* Button on the last screen of the onboarding, it will dismiss the onboarding screen. */
+"contextual.onboarding.final-screen.button" = "Bate palma!";
+
+/* Title of the last screen of the onboarding to the browser app */
+"contextual.onboarding.final-screen.title" = "Ai ghicit!";
+
+/* During onboarding steps this button is shown and takes either to the next steps or closes the onboarding. */
+"contextual.onboarding.got-it.button" = "Am înțeles!";
+
+/* Message of the last screen of the onboarding to the browser app. */
+"contextual.onboarding.highlights.final-screen.message" = "Reține: de fiecare dată când navighezi cu mine, o reclamă terifiantă își pierde aripile.";
+
+/* After the user performs their first search using the browser, this dialog explains the advantages of using DuckDuckGo */
+"contextual.onboarding.highlights.first-search-done.message" = "Acesta este DuckDuckGo Search! Privat. Rapid. Mai puține reclame.";
+
+/* Message of a popover on the browser that invites the user to try a search explaining that their searches are private */
+"contextual.onboarding.highlights.try-a-search.message" = "Căutările tale DuckDuckGo sunt întotdeauna private.";
+
+/* Browser Search query for baby ducklings */
+"contextual.onboarding.highlights.try-search.surprise-me" = "rățuște";
+
+/* Title of a popover on the new tab page browser that invites the user to try a visiting a website */
+"contextual.onboarding.ntp.try-a-site.title" = "Încearcă să vizitezi un site!";
+
+/* Title of a popover on the browser that invites the user to try a search */
+"contextual.onboarding.try-a-search.title" = "Ești gata să începi?\nÎncearcă o căutare!";
+
+/* Message of a popover on the browser that invites the user to try visiting a website to explain that we block trackers */
+"contextual.onboarding.try-a-site.message" = "Voi bloca instrumentele de urmărire ca să nu te mai spioneze.";
+
+/* Title of a popover on the browser that invites the user to try a visiting a website */
+"contextual.onboarding.try-a-site.title" = "Apoi, încearcă să vizitezi un site!";
+
+/* Message of a popover on the browser that invites the user to try visiting the browser Fire Button. Please leave the line break */
+"contextual.onboarding.try-fire-button.message" = "Șterge instantaneu activitatea de navigare cu Fire Button.\n\nÎncearcă! 🔥";
+
+/* Browser Search query for how to say duck in english */
+"contextual.onboarding.try-search.option1-English" = "cum se spune „rață” în spaniolă";
+
+/* Browser Search query for how to say duck in english */
+"contextual.onboarding.try-search.option1international" = "cum se spune „rață” în engleză";
+
+/* Search query for the cast of Mighty Ducks */
+"contextual.onboarding.try-search.option2-english" = "distribuție mighty ducks";
+
+/* Search query for the cast of Avatar */
+"contextual.onboarding.try-search.option2-international" = "distribuția din avatar";
+
+/* Title for a button that triggers an unknown search query for the user. */
+"contextual.onboarding.try-search.surprise-me-title" = "Surprinde-mă!";
+
+/* Fourth paragraph of the Control Center VPN Widget Education screen */
+"control.center.vpn.widget.education.paragraph" = "Găsește **DuckDuckGo** în listă, apoi atinge **Control VPN** pentru a-l adăuga.";
+
+/* First paragraph of the Control Center Widget Education screen */
+"control.center.widget.education.paragraph.1" = "Glisează în jos din colțul din dreapta sus al ecranului";
+
+/* Second paragraph of the Control Center Widget Education screen */
+"control.center.widget.education.paragraph.2" = "Atinge butonul **+** din colțul din stânga sus al **Centrului de control**.";
+
+/* Third paragraph of the Control Center Widget Education screen */
+"control.center.widget.education.paragraph.3" = "Atinge **Adaugă un control** în partea de jos a ecranului";
+
+/* Crash Report always send button title */
+"crash.report.dialog.always.send" = "Trimite întotdeauna rapoarte de cădere";
+
+/* Crash Report hide details button title */
+"crash.report.dialog.hide.details" = "Ascunde";
+
+/* Crash Report dialog message */
+"crash.report.dialog.message" = "Rapoartele de cădere ajută DuckDuckGo să diagnosticheze problemele și să îmbunătățească produsele noastre. Acestea nu conțin informații de identificare personală.";
+
+/* Crash Report never send button title */
+"crash.report.dialog.never.send" = "Nu trimite niciodată";
+
+/* Crash Report show details button title */
+"crash.report.dialog.show.details" = "Vezi ce se trimite";
+
+/* Crash Report dialog title */
+"crash.report.dialog.title" = "Trimite automat rapoarte de cădere?";
 
 /* Title for a section containing only items from past month */
 "date.range.past-month" = "Ultima lună";
@@ -837,18 +913,6 @@
 
 /* Title for a section containing only items from yesterday */
 "date.range.yesterday" = "Ieri";
-
-/* Button title accepting to enable feature to automatically manage cookie popups */
-"dax.cookie-consent.button.accept" = "Gestionare pop-up-uri pentru module cookie";
-
-/* Button title rejecting to enable feature to automatically manage cookie popups */
-"dax.cookie-consent.button.reject" = "Nu, mulțumesc";
-
-/* First part of text displayed on Dax dialog for enabling Autoconsent for Cookie Management feature */
-"dax.cookie-consent.first" = "Se pare că acest site are o fereastră pop-up de solicitare a consimțământului cu privire la modulele cookie👇";
-
-/* Second part of text displayed on Dax dialog for enabling Autoconsent for Cookie Management feature */
-"dax.cookie-consent.second" = "Vrei să mă ocup de asta pentru tine? Pot să încerc să minimizez numărul de module cookie, să maximizez confidențialitatea și să ascund ferestrele pop-up precum aceasta.";
 
 /* No comment provided by engineer. */
 "dax.hide.button" = "Ascunde sfaturile definitiv";
@@ -920,10 +984,16 @@
 "dax.onboarding.home.subsequent" = "Ai ghicit!\n\nReține: de fiecare dată când navighezi cu mine, o reclamă terifiantă își pierde aripile. 👍";
 
 /* No comment provided by engineer. */
-"dax.onboarding.message" = "Internetul poate fi cam terifiant.\n\nNu te îngrijora! Căutarea și navigarea în mod confidențial sunt mai ușoare decât crezi.";
+"Debug" = "Depanează";
 
-/* No comment provided by engineer. */
-"Debug" = "Debug";
+/* Default string used if users device is not iPhone or iPad */
+"device.type.default" = "dispozitiv";
+
+/* Device type is iPhone */
+"device.type.iphone" = "iPhone";
+
+/* Device type is iPad */
+"device.type.pad" = "iPad";
 
 /* GPC Setting state */
 "donotsell.disabled" = "Dezactivat";
@@ -940,17 +1010,20 @@
 /* Alert action for starting a file dowload */
 "downloads.alert.action.save-to-downloads" = "Salvează în Descărcări";
 
-/* Cancel download action for alert when trying to cancel the file download */
+/* Cancel download action for downloads */
 "downloads.cancel-download.alert.cancel" = "Renunță";
 
 /* Message for alert when trying to cancel the file download */
 "downloads.cancel-download.alert.message" = "Sigur dorești să anulezi această descărcare?";
 
-/* Resume download action for alert when trying to cancel the file download */
-"downloads.cancel-download.alert.resume" = "Reia";
+/* Confirm action for alert when trying to cancel the file download */
+"downloads.cancel-download.alert.no" = "Nu";
 
 /* Title for alert when trying to cancel the file download */
 "downloads.cancel-download.alert.title" = "Anulezi descărcarea?";
+
+/* Confirm action for for alert when trying to cancel the file download */
+"downloads.cancel-download.alert.yes" = "Da";
 
 /* Button for deleting all items on downloads list */
 "downloads.downloads-list.delete-all" = "Șterge toate";
@@ -987,6 +1060,69 @@
 
 /* No comment provided by engineer. */
 "Duck Address" = "Duck Address";
+
+/* Title for message explaining to the user that Duck Player is not available */
+"duck-player.contingency-title" = "Duck Player indisponibil";
+
+/* Button for the message explaining to the user that Duck Player is not available so the user can learn more */
+"duck-player.video-contingency-cta" = "Află mai multe";
+
+/* Message explaining to the user that Duck Player is not available */
+"duck-player.video-contingency-message" = "Funcționalitatea Duck Player a fost afectată de modificările recente ale YouTube. Lucrăm pentru a remedia aceste probleme și apreciem înțelegerea ta.";
+
+/* Ai Chat preferences explanation with a markdown link. Do not translate what's inside [] and () */
+"duckai.preferences.text.markdown" = "Duck.ai este o caracteristică opțională care îți permite să discuți anonim cu modele populare de chat AI de la terțe părți. Chaturile tale nu sunt folosite pentru a antrena AI.\n[Află mai multe](ddgquicklink://duckduckgo.com/duckduckgo-help-pages/aichat/)";
+
+/* Toggle text to enable/disable AI Chat in the address bar */
+"duckai.settings.enable.address-bar-searching-toggle" = "Afișează Duck.ai pe pagina de căutare";
+
+/* Toggle text to enable/disable AI Chat in the browsing menu */
+"duckai.settings.enable.browsing-menu-toggle" = "Afișează Duck.ai în meniul browserului";
+
+/* Settings screen cell text for AI Chat settings */
+"duckai.settings.title" = "Duck.ai";
+
+/* No comment provided by engineer. */
+"DuckDuckGo for iOS" = "DuckDuckGo pentru iOS";
+
+/* Text displayed when DuckPlayer is always enabled */
+"duckPlayer.alwaysEnabled.label" = "Întotdeauna";
+
+/* Text displayed when DuckPlayer is in 'Ask' mode. */
+"duckPlayer.ask.label" = "Întreabă de fiecare dată";
+
+/* Text displayed when DuckPlayer is in off. */
+"duckPlayer.never.label" = "Niciodată";
+
+/* Body text for the modal feature explanation */
+"duckplayer.presentation.modal.body" = "Duck Player îți permite să vizionezi YouTube fără reclame țintite în DuckDuckGo, iar ceea ce vizionezi nu îți va influența recomandările.";
+
+/* Button that will dismiss the modal */
+"duckplayer.presentation.modal.dismiss-button" = "Am înțeles!";
+
+/* Two line title (separated by \n) for the feature explanation */
+"duckplayer.presentation.modal.title" = "Te copleșesc reclamele pe YouTube? Încearcă Duck Player!";
+
+/* Two line title (separated by \n) for the feature explanation */
+"duckplayer.presentation.modal.title.youtube" = "Te copleșesc reclamele pe YouTube? Nu și cu Duck Player!";
+
+/* Footer label in the settings screen for Duck Player */
+"duckplayer.settings.footer" = "DuckDuckGo oferă toate elementele de confidențialitate esențiale de care ai nevoie pentru a te proteja în timp ce navighezi pe web.";
+
+/* Text explaining what Duck Player is in the settings screen. */
+"duckplayer.settings.info-text" = "Duck Player îți permite să vizionezi YouTube fără reclame țintite în DuckDuckGo, iar ceea ce vizionezi nu îți va influența recomandările.";
+
+/* Button that takes the user to learn more about Duck Player. */
+"duckplayer.settings.learn-more" = "Află mai multe";
+
+/* Settings screen cell text for DuckPlayer settings to open in new tab */
+"duckplayer.settings.open-new-tab-label" = "Deschide Duck Player într-o filă nouă";
+
+/* Settings screen cell text for DuckPlayer settings */
+"duckplayer.settings.open-videos-in" = "Deschide videoclipurile YouTube în Duck Player";
+
+/* Settings screen cell text for DuckPlayer settings */
+"duckplayer.settings.title" = "Duck Player";
 
 /* Email protection service offered by DuckDuckGo */
 "email-protection" = "Protecția comunicațiilor prin e-mail";
@@ -1060,9 +1196,6 @@
 /* Empty search placeholder on bookmarks search */
 "empty.search" = "Nu s-au găsit potriviri";
 
-/* No comment provided by engineer. */
-"Error" = "Eroare";
-
 /* Button title to Sign In */
 "error.email-protection-sign-in.action" = "Autentificare";
 
@@ -1091,7 +1224,7 @@
 "error.preemptive-crash.title" = "A fost detectată o problemă cu aplicația";
 
 /* Generic error message on a dialog for when the cause is not known. */
-"error.unknown.try.again" = "An unknown error has occurred";
+"error.unknown.try.again" = "S-a produs o eroare necunoscută.";
 
 /* No comment provided by engineer. */
 "favorite" = "Preferință";
@@ -1207,6 +1340,39 @@
 /* Confirmation button */
 "feedback.form.submit" = "Trimite";
 
+/* Title of the feedback form */
+"feedback.form.title" = "Contribuie la îmbunătățirea Privacy Pro";
+
+/* Category for Identity Theft Restoration feedback */
+"feedback.general.category.itr" = "Identity Theft Restoration";
+
+/* Category for Personal Info Removal feedback */
+"feedback.general.category.pir" = "Eliminarea informațiilor personale";
+
+/* Category for subscription and payments feedback */
+"feedback.general.category.ppro" = "Abonamente și plăți";
+
+/* Prompt to select a category for general feedback */
+"feedback.general.category.select" = "SELECTEAZĂ O CATEGORIE";
+
+/* Category for VPN feedback */
+"feedback.general.category.vpn" = "VPN";
+
+/* Category for access code issues */
+"feedback.itr.category.access-code" = "Problemă cu codul de acces";
+
+/* Category for issues contacting an advisor */
+"feedback.itr.category.cant-contact-advisor" = "Nu pot să iau legătura cu consilierul";
+
+/* Prompt to select a category for Identity Theft Restoration feedback */
+"feedback.itr.category.select" = "SELECTEAZĂ O CATEGORIE";
+
+/* Category for other Identity Theft Restoration issues */
+"feedback.itr.category.something-else" = "Altceva";
+
+/* Category for unhelpful advisor calls */
+"feedback.itr.category.unhelpful" = "Apelul către consilier a fost inutil";
+
 /* No comment provided by engineer. */
 "feedback.negative.form.genericPlaceholder" = "Vă rugăm să furnizați detalii cât mai concrete";
 
@@ -1246,6 +1412,24 @@
 /* No comment provided by engineer. */
 "feedback.performance.slowLoading" = "Paginile web sau rezultatele căutării se încarcă încet";
 
+/* Category for when scan finds incorrect records */
+"feedback.pir.category.not-me" = "Scanarea a găsit înregistrări care nu mă privesc";
+
+/* Category for when scan doesn't find info on a specific site */
+"feedback.pir.category.nothing-on-site" = "Scanarea nu a găsit informațiile mele pe un site specific";
+
+/* Category for other Personal Info Removal issues */
+"feedback.pir.category.other" = "Altceva";
+
+/* Category for when the removal process is stuck */
+"feedback.pir.category.removal-stuck" = "Procesul de eliminare este blocat";
+
+/* Category for when the scan is stuck */
+"feedback.pir.category.scan-stuck" = "Scanarea pentru înregistrări este blocată";
+
+/* Prompt to select a category for Personal Info Removal feedback */
+"feedback.pir.category.select" = "SELECTEAZĂ O CATEGORIE";
+
 /* Header above input field */
 "feedback.positive.form.header" = "Partajare detalii";
 
@@ -1263,6 +1447,15 @@
 
 /* Button encouraging uses to share details aboout their feedback */
 "feedback.positive.submit" = "Partajare detalii";
+
+/* Category for other Privacy Pro issues */
+"feedback.ppro.category.other" = "Altceva";
+
+/* Category for one-time password issues */
+"feedback.ppro.category.otp" = "Problemă cu parola de unică folosință";
+
+/* Prompt to select a category for Privacy Pro feedback */
+"feedback.ppro.category.select" = "SELECTEAZĂ O CATEGORIE";
 
 /* No comment provided by engineer. */
 "feedback.start.footer" = "Feedbackul dvs. anonim este important pentru noi.";
@@ -1309,6 +1502,21 @@
 /* No comment provided by engineer. */
 "fireButtonAnimation.waterSwirl.name" = "Vârtej de apă";
 
+/* Description text above the Share Link button */
+"get.browser.on-your-desktop-go-to" = "De pe computerul tău, accesează:";
+
+/* Title for the Share Download Link button */
+"get.browser.share-link" = "Trimite linkul de descărcare";
+
+/* Message displayed in the share action when sharing via email */
+"get.browser.share-link.message" = "Caută în privat și blochează tehnologiile de urmărire cu browserul pentru desktop DuckDuckGo. Accesează acest link pe computerul tău pentru a descărca astăzi.";
+
+/* Title displayed in the share action */
+"get.browser.share-link.title" = "Obține browserul DuckDuckGo pentru Mac sau Windows";
+
+/* Title for the get desktop browser feature */
+"get.browser.title" = "Obține DuckDuckGo pentru Mac sau Windows";
+
 /* No comment provided by engineer. */
 "home.row.onboarding.header" = "Adaugă DuckDuckGo pe ecranul de start!";
 
@@ -1323,6 +1531,12 @@
 
 /* Home tab title */
 "homeTab.title" = "Pagina de pornire";
+
+/* No comment provided by engineer. */
+"ID: %@ | %@ | %@" = "Identificator: %1$@ | %2$@ | %3$@";
+
+/* Message that comes up when trying to enable the VPN from intents, asking the user to enable it from the app so it's configured */
+"intent.vpn.needs.to.be.enabled.from.app" = "Trebuie să activezi VPN-ul din aplicația DuckDuckGo.";
 
 /* OK title for invite screen alert dismissal button */
 "invite.alert.ok.button" = "OK";
@@ -1396,12 +1610,6 @@
 /* No comment provided by engineer. */
 "keyCommandShowAllTabs" = "Afișează toate filele";
 
-/* Please preserve newline character */
-"launchscreenWelcomeMessage" = "Bine ai venit la\nDuckDuckGo!";
-
-/* No comment provided by engineer. */
-"LOREM IPSUM" = "LOREM IPSUM";
-
 /* Summary text for the macOS browser waitlist */
 "mac-browser.waitlist.summary" = "DuckDuckGo pentru Mac are viteza de care ai nevoie, funcționalitățile de răsfoire pe care ți le dorești și este prevăzută cu cele mai bune caracteristici de bază în privința confidențialității din domeniu.";
 
@@ -1423,9 +1631,6 @@
 /* Title for the Join Waitlist screen */
 "mac-waitlist.join-waitlist-screen.try-duckduckgo-for-mac" = "Obține DuckDuckGo pentru Mac!";
 
-/* Disclaimer for the Join Waitlist screen */
-"mac-waitlist.join-waitlist-screen.windows" = "Va fi disponibil în curând și pentru Windows!";
-
 /* Title for the macOS waitlist button redirecting to Windows waitlist */
 "mac-waitlist.join-waitlist-screen.windows-waitlist" = "Cauți versiunea pentru Windows?";
 
@@ -1444,6 +1649,9 @@
 /* No comment provided by engineer. */
 "menu.button.hint" = "Meniul de navigare";
 
+/* No comment provided by engineer. */
+"Message policy hostname" = "Nume gazdă pentru politica de mesaje";
+
 /* Title for back button in navigation bar */
 "navbar.back-button.title" = "Înapoi";
 
@@ -1456,167 +1664,146 @@
 /* Edit button */
 "navigation.title.edit" = "Editați";
 
-/* String indicating NetP is connected when viewed from the settings screen */
-"netP.cell.connected" = "Connected";
+/* String indicating NetP is snoozing when viewed from the settings screen */
+"netP.cell.snoozing" = "Amânat";
 
-/* String indicating NetP is disconnected when viewed from the settings screen */
-"netP.cell.disconnected" = "Not connected";
+/* Title for the DuckDuckGo VPN feature */
+"netP.title" = "DuckDuckGo VPN";
 
-/* Title for the Network Protection feature */
-"netP.title" = "Network Protection";
+/* Button title for tooltip about adding VPN widget */
+"network.protection.addwidget.tip.action" = "Adăugare widget";
 
-/* Privacy Policy title for Network Protection */
-"network-protection.privacy-policy.title" = "Politica de confidențialitate";
+/* Message for tooltip about adding VPN widget */
+"network.protection.addwidget.tip.message" = "Activează și dezactivează VPN-ul chiar din ecranul de pornire.";
 
-/* Title text for the Network Protection terms and conditions accept button */
-"network-protection.waitlist.agree-and-continue" = "De acord și continuă";
+/* Title for tooltip about adding VPN widget */
+"network.protection.addwidget.tip.title" = "Adaugă widgetul VPN";
 
-/* Availability disclaimer for Network Protection join waitlist screen */
-"network-protection.waitlist.availability-disclaimer" = "Protecția rețelei poate fi utilizată gratuit în timpul accesului timpuriu.";
+/* The body of the notification when Privacy Pro subscription expired */
+"network.protection.entitlement.expired.notification.body" = "VPN deconectat din cauza expirării abonamentului. Abonează-te la Privacy Pro pentru a reconecta DuckDuckGo VPN.";
 
-/* Agree and Continue button for Network Protection join waitlist screen */
-"network-protection.waitlist.button.agree-and-continue" = "De acord și continuă";
+/* The body of the notification shown when VPN fails to reconnect */
+"network.protection.failure.notification.body" = "DuckDuckGo VPN nu a reușit să se conecteze. Încearcă din nou mai târziu.";
 
-/* Enable Notifications button for Network Protection joined waitlist screen */
-"network-protection.waitlist.button.enable-notifications" = "Activează notificările";
+/* Title for the VPN FAQ screen. */
+"network.protection.faq.title" = "Întrebări frecvente despre DuckDuckGo VPN";
 
-/* Button title for users who already have an invite code */
-"network-protection.waitlist.button.existing-invite-code" = "Am un cod de invitație";
+/* Message for tooltip about geoswitching */
+"network.protection.geoswitching.tip.message" = "Poți personaliza locația VPN-ului tău, conectându-te la oricare dintre serverele noastre din întreaga lume.";
 
-/* Join Waitlist button for Network Protection join waitlist screen */
-"network-protection.waitlist.button.join-waitlist" = "Înscrie-te pe lista de așteptare";
+/* Title for tooltip about geoswitching */
+"network.protection.geoswitching.tip.title" = "Schimbă-ți locația";
 
-/* Button title text for the Network Protection waitlist confirmation prompt */
-"network-protection.waitlist.get-started" = "Să începem";
-
-/* Subtitle for section 1 of the Network Protection invited screen */
-"network-protection.waitlist.invited.section-1.subtitle" = "Criptează traficul online în browserele și aplicațiile utilizate.";
-
-/* Title for section 1 of the Network Protection invited screen */
-"network-protection.waitlist.invited.section-1.title" = "Acoperire totală a dispozitivului";
-
-/* Subtitle for section 2 of the Network Protection invited screen */
-"network-protection.waitlist.invited.section-2.subtitle" = "Nu este nevoie de o aplicație separată. Conectează-te cu un singur clic și vezi starea conexiunii dintr-o singură privire.";
-
-/* Title for section 2 of the Network Protection invited screen */
-"network-protection.waitlist.invited.section-2.title" = "Rapid, sigur și ușor de utilizat";
-
-/* Subtitle for section 3 of the Network Protection invited screen */
-"network-protection.waitlist.invited.section-3.subtitle" = "Nu înregistrăm și nu salvăm date care pot face legătura cu activitatea ta online.";
-
-/* Title for section 3 of the Network Protection invited screen */
-"network-protection.waitlist.invited.section-3.title" = "Politică strictă de interzicere a jurnalelor";
-
-/* Subtitle for Network Protection invited screen */
-"network-protection.waitlist.invited.subtitle" = "Obține un nivel suplimentar de protecție online cu VPN-ul creat pentru viteză și simplitate. Criptează conexiunea la internet pe întregul dispozitiv și ascunde-ți locația și adresa IP de pe site-urile pe care le accesezi.";
-
-/* Title for Network Protection invited screen */
-"network-protection.waitlist.invited.title" = "Ești invitat să încerci\naccesul timpuriu la Network Protection!";
-
-/* First subtitle for Network Protection join waitlist screen */
-"network-protection.waitlist.join.subtitle.1" = "Obține o conexiune sigură oricând și oriunde cu Network Protection, VPN-ul de la DuckDuckGo.";
-
-/* Second subtitle for Network Protection join waitlist screen */
-"network-protection.waitlist.join.subtitle.2" = "Alătură-te listei de așteptare și te vom anunța când îți vine rândul.";
-
-/* Title for Network Protection join waitlist screen */
-"network-protection.waitlist.join.title" = "Network Protection Early Access";
-
-/* Title for Network Protection joined waitlist screen */
-"network-protection.waitlist.joined.title" = "Ești pe listă!";
-
-/* Subtitle 1 for Network Protection joined waitlist screen when notifications are enabled */
-"network-protection.waitlist.joined.with-notifications.subtitle.1" = "Noile invitații sunt trimise la fiecare câteva zile pe baza principiului „primul venit, primul servit”.";
-
-/* Subtitle 2 for Network Protection joined waitlist screen when notifications are enabled */
-"network-protection.waitlist.joined.with-notifications.subtitle.2" = "Te vom anunța când invitația ta este gata.";
-
-/* Body text for the alert to enable notifications */
-"network-protection.waitlist.notification-alert.description" = "Îți vom trimite o notificare atunci când invitația de a testa Network Protection este gata.";
-
-/* Subtitle for the alert to confirm enabling notifications */
-"network-protection.waitlist.notification-prompt-description" = "Primești o notificare atunci când copia ta pentru acces timpuriu la Network Protection este gata.";
-
-/* Title for the alert to confirm enabling notifications */
-"network-protection.waitlist.notification-prompt-title" = "Află momentul exact în care ești invitat(ă)";
-
-/* Title for Network Protection waitlist notification */
-"network-protection.waitlist.notification.text" = "Deschide invitația ta";
-
-/* Title for Network Protection waitlist notification */
-"network-protection.waitlist.notification.title" = "Network Protection este gata!";
-
-/* Subtitle text for the Network Protection settings row */
-"network-protection.waitlist.settings-subtitle.joined-and-invited" = "Invitația ta este gata!";
-
-/* Subtitle text for the Network Protection settings row */
-"network-protection.waitlist.settings-subtitle.joined-but-not-invited" = "Ești pe listă!";
-
-/* Subtitle text for the Network Protection settings row */
-"network-protection.waitlist.settings-subtitle.waitlist-not-joined" = "Alătură-te listei de așteptare private";
+/* The body of the notification shown when VPN connection is interrupted */
+"network.protection.interrupted.notification.body" = "DuckDuckGo VPN a fost întrerupt. Se încearcă reconectarea acum...";
 
 /* Message for the network protection invite dialog */
-"network.protection.invite.dialog.message" = "Enter your invite code to get started.";
+"network.protection.invite.dialog.message" = "Completează codul de invitație pentru a începe.";
 
 /* Title for the network protection invite screen */
-"network.protection.invite.dialog.title" = "Ești invitat(ă) să încerci Network Protection";
+"network.protection.invite.dialog.title" = "Te invităm să încerci DuckDuckGo VPN";
 
 /* Prompt for the network protection invite code text field */
-"network.protection.invite.field.prompt" = "Invite Code";
+"network.protection.invite.field.prompt" = "Codul de invitație";
 
 /* Message for the network protection invite success view */
-"network.protection.invite.success.message" = "Hide your location from websites and conceal your online activity from Internet providers and others on your network.";
+"network.protection.invite.success.message" = "Ascunde-ți locația de pe site-uri și disimulează-ți activitatea online față de furnizorii de internet și de alte entități din rețeaua ta.";
 
 /* Title for the network protection invite success view */
-"network.protection.invite.success.title" = "Success! You’re in.";
+"network.protection.invite.success.title" = "Ai reușit! Acum o utilizezi.";
+
+/* The title of the notifications shown from VPN */
+"network.protection.notification.title" = "DuckDuckGo";
 
 /* Title text for an iOS quick action that opens VPN settings */
 "network.protection.quick-action.open-vpn" = "Deschide VPN";
 
+/* Button title for tooltip about VPN snooze mode */
+"network.protection.snooze.tip.action" = "Află mai multe";
+
+/* Message for tooltip about VPN snooze mode */
+"network.protection.snooze.tip.message" = "Poți utiliza site-uri sau aplicații care blochează traficul VPN, amânând conectarea la VPN.";
+
+/* Title for tooltip about VPN snooze mode */
+"network.protection.snooze.tip.title" = "Evită conflictele VPN";
+
+/* The body of the notification when the VPN is snoozed, with a duration string as parameter (e.g, 30 minutes) */
+"network.protection.snoozed.notification.body" = "VPN-ul este amânat pentru %@";
+
 /* The label for when NetP VPN is connected plus the length of time connected as a formatter HH:MM:SS string */
-"network.protection.status.connected.format" = "Connected - %@";
+"network.protection.status.connected.format" = "Conectat · %@";
 
 /* The label for the NetP VPN when connecting */
-"network.protection.status.connecting" = "Connecting...";
+"network.protection.status.connecting" = "Se conectează...";
 
 /* The label for the NetP VPN when disconnected */
-"network.protection.status.disconnected" = "Not connected";
+"network.protection.status.disconnected" = "Nu este conectat";
 
 /* The label for the NetP VPN when disconnecting */
-"network.protection.status.disconnecting" = "Disconnecting...";
+"network.protection.status.disconnecting" = "Se deconectează...";
 
-/* Message label text for the netP status view */
-"network.protection.status.header.message" = "DuckDuckGo's VPN secures all of your device's Internet traffic anytime, anywhere.";
+/* Message label text for the status view when VPN is disconnected */
+"network.protection.status.header.message.off" = "Conectează-te pentru a securiza traficul pe internet\n pentru toate dispozitivele tale.";
 
-/* Header title label text for the status view when netP is disconnected */
-"network.protection.status.header.title.off" = "Network Protection is Off";
+/* Message label text for the status view when VPN is disconnected */
+"network.protection.status.header.message.on" = "Tot traficul de internet al dispozitivelor este securizat\nprin VPN.";
 
-/* Header title label text for the status view when netP is connected */
-"network.protection.status.header.title.on" = "Network Protection is On";
+/* Header title label text for the status view when VPN is disconnected */
+"network.protection.status.header.title.off" = "DuckDuckGo VPN este oprit";
+
+/* Header title label text for the status view when VPN is connected */
+"network.protection.status.header.title.on" = "DuckDuckGo VPN este pornit";
+
+/* Header title label text for the status view when VPN is snoozing */
+"network.protection.status.header.title.snoozed" = "DuckDuckGo VPN este amânat";
 
 /* The status view 'Share Feedback' button which is shown inline on the status view after the temporary free use footer text */
-"network.protection.status.menu.share.feedback" = "Share Feedback";
+"network.protection.status.menu.share.feedback" = "Partajează feedback";
+
+/* The label for the NetP VPN when paused */
+"network.protection.status.paused" = "Întrerupt";
+
+/* The label for when NetP VPN is snoozing plus the length of time remaining formatted as '0:00' */
+"network.protection.status.snoozing.format" = "Amânare, %@ rămase";
+
+/* Snooze button title shown in NetworkProtection's status view. */
+"network.protection.status.view.action.snooze" = "Amână pentru 20 de minute";
+
+/* Wake Up button title shown in NetworkProtection's status view. */
+"network.protection.status.view.action.wake-up" = "Trezește-te";
 
 /* Connection details label shown in NetworkProtection's status view. */
-"network.protection.status.view.connection.details" = "Connection Details";
+"network.protection.status.view.connection.details" = "Detalii conexiune";
+
+/* Custom DNS label shown in NetworkProtection's status view. */
+"network.protection.status.view.custom.dns" = "Server DNS";
 
 /* Generic connection failed error message shown in NetworkProtection's status view. */
-"network.protection.status.view.error.connection.failed.message" = "Please try again later.";
+"network.protection.status.view.error.connection.failed.message" = "Încearcă din nou mai târziu.";
 
 /* Generic connection failed error title shown in NetworkProtection's status view. */
-"network.protection.status.view.error.connection.failed.title" = "Failed to Connect.";
+"network.protection.status.view.error.connection.failed.title" = "Conectarea nu a reușit.";
 
 /* IP Address label shown in NetworkProtection's status view. */
-"network.protection.status.view.ip.address" = "IP Address";
+"network.protection.status.view.ip.address" = "Adresa IP";
 
 /* Location label shown in NetworkProtection's status view. */
-"network.protection.status.view.location" = "Location";
+"network.protection.status.view.location" = "Locație";
 
 /* Label shown on the title of the settings section in NetworkProtection's status view. */
 "network.protection.status.view.settings.section.title" = "Gestionează";
 
 /* Title label text for the status view when netP is disconnected */
-"network.protection.status.view.title" = "Network Protection";
+"network.protection.status.view.title" = "VPN";
+
+/* The body of the notification shown when VPN reconnects successfully */
+"network.protection.success.notification.body" = "DuckDuckGo VPN este activat. Locația și activitatea ta online sunt protejate.";
+
+/* The body of the notification shown when VPN connects successfully with the city + state/country as formatted parameter */
+"network.protection.success.notification.subtitle.including.serverLocation" = "Dirijarea traficului dispozitivului prin %@.";
+
+/* The body of the notification shown when VPN connects successfully with the city + state/country as formatted parameter */
+"network.protection.success.notification.subtitle.snooze.ended.including.serverLocation" = "Amânarea VPN a luat sfârșit. Se dirijează traficul dispozitivului prin %@.";
 
 /* Title for the button to link to the iOS app settings and enable notifications app-wide. */
 "network.protection.turn.on.notifications.button.title" = "Activează Notificările";
@@ -1624,32 +1811,50 @@
 /* Footer text under the button to link to the iOS app settings and enable notifications app-wide. */
 "network.protection.turn.on.notifications.section.footer" = "Permite ca DuckDuckGo să te înștiințeze dacă conexiunea ta devine mai slabă sau dacă starea VPN-ului se schimbă.";
 
+/* Title of the About section in the VPN status screen */
+"network.protection.vpn.about" = "Despre";
+
+/* Section header for the toggle for VPN notifications. */
+"network.protection.vpn.alerts.section.header" = "Notificări";
+
 /* List section footer for the toggle for VPN alerts. */
 "network.protection.vpn.alerts.toggle.section.footer" = "Primește o notificare dacă conexiunea ta devine mai slabă sau dacă starea VPN-ului se schimbă.";
 
-/* Title for the toggle for VPN alerts. */
-"network.protection.vpn.alerts.toggle.title" = "Alerte VPN";
+/* Title for the toggle for VPN notifications. */
+"network.protection.vpn.alerts.toggle.title" = "Notificări VPN";
+
+/* Title for the data volume section in the VPN status screen */
+"network.protection.vpn.data-volume" = "Volum de date";
 
 /* Footer text for the Exclude Local Networks setting item. */
 "network.protection.vpn.exclude.local.networks.setting.footer" = "Lasă traficul local să ocolească VPN-ul și să se conecteze la dispozitivele din rețeaua locală, cum ar fi o imprimantă.";
+
+/* Header text for the Exclude Local Networks setting item. */
+"network.protection.vpn.exclude.local.networks.setting.header" = "Generale";
 
 /* Title for the Exclude Local Networks setting item. */
 "network.protection.vpn.exclude.local.networks.setting.title" = "Exclude rețelele locale";
 
 /* Title for the VPN Location screen's All Countries section. */
-"network.protection.vpn.location.all.countries.section.title" = "All Countries";
+"network.protection.vpn.location.all.countries.section.title" = "Toate țările";
+
+/* Description of the location type in the VPN status screen */
+"network.protection.vpn.location.connected" = "Locație conectată";
 
 /* Subtitle of countries item when there are multiple cities, example : */
 "network.protection.vpn.location.country.item.formatted.cities.count" = "%d orașe";
 
-/* Title for the VPN Location screen's Nearest Available selection item. */
-"network.protection.vpn.location.nearest.available.item.title" = "Nearest Available";
+/* Description of the location type in the VPN status screen */
+"network.protection.vpn.location.nearest" = "(Cea mai apropiată)";
 
 /* Footer describing the VPN Location screen's Recommended section which just has Nearest Available. */
 "network.protection.vpn.location.recommended.section.footer" = "Conectează-te automat la cel mai apropiat server pe care îl putem găsi.";
 
 /* Title for the VPN Location screen's Recommended section. */
-"network.protection.vpn.location.recommended.section.title" = "Recommended";
+"network.protection.vpn.location.recommended.section.title" = "Recomandat";
+
+/* Description of the location type in the VPN status screen */
+"network.protection.vpn.location.selected" = "Locație selectată";
 
 /* Subtitle for the preferred location item that formats a city and country. E.g Chicago, United States */
 "network.protection.vpn.location.subtitle.formatted.city.and.country" = "%1$@, %2$@";
@@ -1661,28 +1866,139 @@
 "network.protection.vpn.notifications.title" = "Notificări VPN";
 
 /* Label for the Preferred Location VPN Settings item when the nearest available location is selected. */
-"network.protection.vpn.preferred.location.nearest" = "Nearest Available";
+"network.protection.vpn.preferred.location.nearest" = "Cea mai apropiată locație";
 
 /* Title for the Preferred Location VPN Settings item. */
-"network.protection.vpn.preferred.location.title" = "Preferred Location";
+"network.protection.vpn.preferred.location.title" = "Locație preferată";
 
-/* Footer text for the Always on VPN setting item. */
-"network.protection.vpn.secure.dns.setting.footer" = "VPN-ul nostru utilizează DNS securizat pentru a-ți păstra activitatea online privată, astfel încât furnizorul tău de internet să nu poată vedea ce site-uri web accesezi.";
+/* Footer text for the DNS server setting item. */
+"network.protection.vpn.secure.dns.setting.footer" = "DuckDuckGo direcționează interogările DNS prin serverele noastre DNS, astfel încât furnizorul tău de internet să nu poată vedea ce site-uri web vizitezi.";
+
+/* Title for the FAQ row in the VPN status screen. */
+"network.protection.vpn.settings.faq" = "Întrebări frecvente și asistență";
+
+/* Title for the feedback row in the VPN status screen. */
+"network.protection.vpn.settings.share-feedback" = "Oferă feedback despre VPN";
 
 /* Title for the VPN Settings screen. */
 "network.protection.vpn.settings.title" = "Setări VPN";
 
+/* Section header for the shortcuts section in VPN settings. */
+"network.protection.vpn.shortcuts.section.header" = "Scurtături";
+
+/* Information message about New Tab Page redesign */
+"new.tab.page.intro.message.body" = "Personalizează-ți Favoritele și funcțiile predilecte. Reordonează lucrurile sau ascunde-le pentru a menține ordinea.";
+
+/* Title of information message about New Tab Page redesign */
+"new.tab.page.intro.message.title" = "Pagina Filă nouă este... nouă!";
+
+/* Name of favorites section setting */
+"new.tab.page.settings.section.name.favorites" = "Preferințe";
+
+/* Name of shortcuts section setting */
+"new.tab.page.settings.section.name.shortcuts" = "Scurtături";
+
+/* Footer of the group allowing for setting up new tab page sections */
+"new.tab.page.settings.sections.description" = "Afișează, ascunde și reordonează secțiunile din pagina noii file";
+
+/* Header title of the group allowing for setting up new tab page sections */
+"new.tab.page.settings.sections.header.title" = "SECȚIUNI";
+
+/* Header title of the shortcuts in New Tab Page preferences. */
+"new.tab.page.settings.shortcuts.header.title" = "SCURTĂTURI";
+
+/* Title of New Tab Page preferences page. */
+"new.tab.page.settings.title" = "Personalizează pagina Filă nouă";
+
+/* Shortcut title leading to AI Chat */
+"new.tab.page.shortcut.ai.chat" = "Chat IA";
+
+/* Shortcut title leading to Bookmarks */
+"new.tab.page.shortcut.bookmarks" = "Semne de carte";
+
+/* Shortcut title leading to Downloads */
+"new.tab.page.shortcut.downloads" = "Descărcări";
+
+/* Shortcut title leading to Passwords */
+"new.tab.page.shortcut.passwords" = "Parole";
+
+/* Shortcut title leading to app settings */
+"new.tab.page.shortcut.settings" = "Setări";
+
+/* Text shown on the favorites info tooltip */
+"new.tab.page.tooltip.body" = "Pe orice site, deschide meniul ••• și selectează **Adaugă la favorite** pentru a adăuga la pagina Filă nouă.";
+
 /* Do not translate - stringsdict entry */
 "number.of.tabs" = "number.of.tabs";
-
-/* No comment provided by engineer. */
-"Ok" = "OK";
 
 /* Text displayed on notification appearing in the address bar when the browser  dismissed the cookie popup automatically rejecting it */
 "omnibar.notification.cookies-managed" = "Modulele cookie au fost gestionate";
 
 /* Text displayed on notification appearing in the address bar when the browser  hides a cookie popup */
 "omnibar.notification.popup-hidden" = "Pop-up ascuns";
+
+/* Button on the Add to Dock tutorial screen of the onboarding, it will proceed to the next step of the onboarding. */
+"onboarding.addToDock.buttons.gotIt" = "Am înțeles";
+
+/* Button to change the default browser */
+"onboarding.browsers.cta" = "Alege browserul";
+
+/* Message to highlight browser capability of private searches */
+"onboarding.browsers.features.privateSearch.title" = "Caută implicit în mod privat";
+
+/* The message of the option to set the address bar to the bottom. */
+"onboarding.highlights.addressBarPosition.bottom.message" = "Ușor de accesat";
+
+/* The title of the option to set the address bar to the bottom. */
+"onboarding.highlights.addressBarPosition.bottom.title" = "Partea de jos";
+
+/* The title of the CTA to progress to the next onboarding screen. */
+"onboarding.highlights.addressBarPosition.cta" = "Următorul";
+
+/* Indicates what address bar option (Top/Bottom) is the default one. E.g. Top (Default) */
+"onboarding.highlights.addressBarPosition.default" = "(implicit)";
+
+/* The title of the onboarding dialog popup to select the preferred address bar position. */
+"onboarding.highlights.addressBarPosition.title" = "Unde ar trebui să îți pun bara de adrese?";
+
+/* The message of the option to set the address bar to the top. */
+"onboarding.highlights.addressBarPosition.top.message" = "Ușor de văzut";
+
+/* The title of the option to set the address bar to the top. */
+"onboarding.highlights.addressBarPosition.top.title" = "Sus";
+
+/* The title of the CTA to progress to the next onboarding screen. */
+"onboarding.highlights.appIconSelection.cta" = "Următorul";
+
+/* The subheader of the onboarding dialog popup to select the preferred App icon. */
+"onboarding.highlights.appIconSelection.message" = "Alege pictograma aplicației:";
+
+/* The title of the onboarding dialog popup to select the preferred App icon. */
+"onboarding.highlights.appIconSelection.title" = "Care culoare arată cel mai bine pentru mine?";
+
+/* Message to highlight how the browser allows you to block cookie pop-ups */
+"onboarding.highlights.browsers.features.cookiePopups.title" = "Blochează solicitările modulelor cookie și ferestrele pop-up";
+
+/* Message to highlight browser capability of blocking creepy ads */
+"onboarding.highlights.browsers.features.creepyAds.title" = "Blochează reclamele direcționate";
+
+/* Message to highlight browser capability of swiftly erase browsing data */
+"onboarding.highlights.browsers.features.eraseBrowsingData.title" = "Șterge rapid datele de navigare";
+
+/* Message to highlight browser capability ofblocking 3rd party trackers */
+"onboarding.highlights.browsers.features.trackerBlocker.title" = "Blochează tehnologiile de urmărire externe";
+
+/* The title of the dialog to show the privacy features that DuckDuckGo offers */
+"onboarding.highlights.browsers.title" = "Mecanismele de protecție au fost activate!";
+
+/* The title of the fire button CTA to skip erasing the data. */
+"onboarding.highlights.fireDialog.cta.skip" = "Ignorare";
+
+/* The title of the onboarding dialog popup */
+"onboarding.highlights.intro.title" = "Salut!\n\nEști gata pentru un browser mai rapid care îți asigură protecția?";
+
+/* Button to continue the onboarding process */
+"onboarding.intro.cta" = "Să începem!";
 
 /* No comment provided by engineer. */
 "onboarding.widgets.continueButton" = "Adăugare widget";
@@ -1717,17 +2033,89 @@
 /* ’Link’ is link on a website */
 "open.externally.failed" = "Aplicația necesară pentru a deschide acel link nu poate fi găsită";
 
-/* No comment provided by engineer. */
-"Please enter which app on your device is broken." = "Menționează ce aplicație de pe dispozitivul tău este nefuncțională.";
-
 /* Activate button */
-"pm.activate" = "Reactivate";
+"pm.activate" = "Reactivează";
 
 /* Cancel button */
-"pm.cancel" = "Cancel";
+"pm.cancel" = "Renunță";
 
 /* Deactivate button */
-"pm.deactivate" = "Deactivate";
+"pm.deactivate" = "Dezactivează";
+
+/* Label for the email form in the Privacy Pro feedback form */
+"ppro.feedback-form.email.label" = "E-mail (opțional)";
+
+/* Placeholder for the email form in the Privacy Pro feedback form */
+"ppro.feedback-form.email.placeholder" = "name@email.com";
+
+/* Placeholder for the General Feedback step in the Privacy Pro feedback form */
+"ppro.feedback-form.general-feedback.placeholder" = "Te rugăm să ne comunici feedbackul tău...";
+
+/* Title for the General Feedback step in the Privacy Pro feedback form */
+"ppro.feedback-form.general-feedback.title" = "Feedback general";
+
+/* Title for the ITR category in the Privacy Pro feedback form */
+"ppro.feedback-form.report-itr-problem.title" = "Identity Theft Restoration";
+
+/* Title for the PIR category in the Privacy Pro feedback form */
+"ppro.feedback-form.report-pir-problem.title" = "Personal Information Removal";
+
+/* Title for the Subscriptions and Payments category in the Privacy Pro feedback form */
+"ppro.feedback-form.report-ppro-problem.title" = "Abonamente și plăți";
+
+/* Placeholder for the Report a Problem step in the Privacy Pro feedback form */
+"ppro.feedback-form.report-problem.placeholder" = "Spune-ne ce se întâmplă...";
+
+/* Title for the Report a Problem step in the Privacy Pro feedback form */
+"ppro.feedback-form.report-problem.title" = "Raportează o problemă";
+
+/* Title for the VPN category in the Privacy Pro feedback form */
+"ppro.feedback-form.report-vpn-problem.title" = "VPN";
+
+/* Placeholder for the Feature Request step in the Privacy Pro feedback form */
+"ppro.feedback-form.request-feature.placeholder" = "Ce caracteristică ai dori să vezi?";
+
+/* Title for the Feature Request step in the Privacy Pro feedback form */
+"ppro.feedback-form.request-feature.title" = "Solicitare de funcționalitate";
+
+/* Title for the category selection section in the Privacy Pro feedback form */
+"ppro.feedback-form.select-category.title" = "SELECTEAZĂ O CATEGORIE";
+
+/* Text for the body of the PPro feedback form */
+"ppro.feedback-form.text-1" = "Ai găsit o problemă care nu este acoperită în [centrul nostru de ajutor](duck://)? Ne dorim foarte mult să știm acest lucru.Furnizează o adresă de e-mail dacă dorești să te contactăm cu privire la această problemă (este posibil să nu putem răspunde la toate problemele):";
+
+/* Text for the body of the PPro feedback form */
+"ppro.feedback-form.text-2" = "Pe lângă detaliile menționate mai sus, trimitem câteva informații anonimizate împreună cu feedbackul tău:";
+
+/* Bullet text for the body of the PPro feedback form */
+"ppro.feedback-form.text-3" = "• dacă anumite funcții ale browserului sunt active;";
+
+/* Bullet text for the body of the PPro feedback form */
+"ppro.feedback-form.text-4" = "• diagnosticare agregată a aplicației (de exemplu, coduri de eroare).";
+
+/* Text for the body of the PPro feedback form */
+"ppro.feedback-form.text-5" = "Atingând „Transmite”, ești de acord ca DuckDuckGo să utilizeze informațiile trimise pentru a îmbunătăți aplicația.";
+
+/* Title for the text box in the Privacy Pro feedback form */
+"ppro.feedback-form.text-box.title" = "Feedback";
+
+/* Title for the Privacy Pro feedback form */
+"ppro.feedback-form.title" = "Trimite feedback";
+
+/* Button title for sync bookmarks limits exceeded warning to go to manage bookmarks */
+"prefrences.sync.bookmarks-limit-exceeded-action" = "Gestionează marcajele";
+
+/* Description for sync bookmarks limits exceeded warning */
+"prefrences.sync.bookmarks-limit-exceeded-description" = "Ai atins numărul maxim de marcaje. Șterge câteva pentru a relua sincronizarea.";
+
+/* Button title for sync credentials limits exceeded warning to go to manage passwords */
+"prefrences.sync.credentials-limit-exceeded-action" = "Gestionează parolele…";
+
+/* Description for sync credentials limits exceeded warning */
+"prefrences.sync.credentials-limit-exceeded-description" = "Ai atins numărul maxim de parole. Șterge câteva pentru a relua sincronizarea.";
+
+/* Title for sync limits exceeded warning */
+"prefrences.sync.limit-exceeded-title" = "Sincronizarea întreruptă";
 
 /* No comment provided by engineer. */
 "preserveLogins.domain.list.footer" = "Site-urile web se bazează pe cookie-uri pentru a te menține conectat. Atunci când ștergi activitatea și istoricul unui site, cookie-urile nu vor fi șterse și vei rămâne conectat, chiar și după utilizarea butonului Ștergere activitate și istoric. Blocăm totuși instrumentele de urmărire terțe găsite pe site-urile web cu ștergerea activității și istoricului din browser la ieșire.";
@@ -1765,6 +2153,9 @@
 /* Confirmation button in alert */
 "preserveLogins.remove.all.ok" = "OK";
 
+/* No comment provided by engineer. */
+"Privacy Protections" = "Măsuri de protecție a confidențialității";
+
 /* Privacy Icon accessibility title */
 "privacy.icon.dax" = "Logoul DuckDuckGo";
 
@@ -1787,6 +2178,9 @@
 "prompt.custom.url.scheme.title" = "Deschizi în altă aplicație?";
 
 /* No comment provided by engineer. */
+"Reset" = "Resetează";
+
+/* No comment provided by engineer. */
 "search.hint.duckduckgo" = "Caută sau introdu adresa";
 
 /* No comment provided by engineer. */
@@ -1794,6 +2188,18 @@
 
 /* No comment provided by engineer. */
 "section.title.favorites" = "Preferințe";
+
+/* Name of the option the user can chose to give general browser feedback */
+"send.browser.feedback.general-feedback" = "Feedback general";
+
+/* Name of the option the user can chose to give browser feedback about a problem they enountered */
+"send.browser.feedback.report-problem" = "Raportează o problemă";
+
+/* Name of the option the user can chose to give browser feedback about a feature they would like */
+"send.browser.feedback.request-feature" = "Solicită o funcționalitate";
+
+/* Title of the picker where the user can chose the category of the feedback they want ot send. */
+"send.browser.feedback.select-category" = "SELECTEAZĂ O CATEGORIE";
 
 /* Settings cell for About DDG */
 "settings.about.ddg" = "Despre DuckDuckGo";
@@ -1804,17 +2210,27 @@
 /* about page */
 "settings.about.text" = "DuckDuckGo este o companie independentă înființată în 2008, care oferă confidențialitate pe internet tuturor celor care s-au săturat să fie urmăriți online și își doresc o soluție simplă. Suntem dovada că protecția confidențialității online fără compromisuri este reală.\n\nBrowserul DuckDuckGo oferă funcțiile pe care le aștepți de la browserul predilect, cum ar fi marcajele, filele, parolele și multe altele, plus peste [o duzină de instrumente puternice de protecție a confidențialității](ddgQuickLink://duckduckgo.com/duckduckgo-help-pages/privacy/web-tracking-protections/) care nu sunt oferite implicit de majoritatea browserelor populare. Acest set unic și cuprinzător de măsuri de protecție a confidențialității te ajută să îți protejezi activitățile online, de la căutări la navigare, e-mailuri și multe altele.\n\nMăsurile noastre robuste de protecție a confidențialității funcționează fără a necesita cunoștințe tehnice din partea ta și fără a fi nevoie să faci setări complicate. Tot ce trebuie să faci este să folosești browserul DuckDuckGo pe toate dispozitivele și vei beneficia implicit de confidențialitate.\n\nDar dacă *chiar dorești* să consulți detaliile mai tehnice, poți găsi mai multe informații despre modul în care funcționează instrumentele DuckDuckGo de protecție a confidențialității în [paginile noastre de asistență](ddgQuickLink://duckduckgo.com/duckduckgo-help-pages/).";
 
+/* Settings screen accessibility section title */
+"settings.accessibility" = "Accesibilitate";
+
 /* Settings screen cell text for adding the app to the dock */
 "settings.add.to.dock" = "Adaugă aplicația la secțiunea ta fixă";
 
 /* Settings screen cell text for add widget to the home screen */
 "settings.add.widget" = "Adaugă un widget la ecranul de întâmpinare";
 
-/* Settings screen cell text for addess bar position */
-"settings.address.bar" = "Poziția barei de adrese";
+/* Title for the settings VPN subsection where the user can learn how to add the VPN to their home screen */
+"settings.add.widget.vpn" = "Adaugă widgetul VPN DuckDuckGo pe ecranul tău de pornire";
+
+/* Name of the settings subsection related to the address bar
+   Settings screen cell text for addess bar position */
+"settings.address.bar" = "Bara de adrese";
 
 /* Settings screen cell title for toggling full URL visibility in address bar */
 "settings.address.full.url" = "Afișați adresa completă a site-ului";
+
+/* Label describing a feature which is turned on always */
+"settings.always.on" = "Întotdeauna activat";
 
 /* Settings screen appearance section title */
 "settings.appearance" = "Aspect";
@@ -1826,16 +2242,34 @@
 "settings.associated.apps.description" = "Dezactivează pentru a preveni deschiderea automată a linkurilor în alte aplicații instalate.";
 
 /* Settings screen cell for autocomplete */
-"settings.autocomplete" = "Afișează sugestiile de completare automată";
+"settings.autocomplete" = "Sugestii de căutare";
+
+/* Settings label for enabling or disabling recently visited sites */
+"settings.autocomplete.recentlyvisited" = "Site-uri vizitate recent";
+
+/* Settings label for enabling or disabling recently visited sites */
+"settings.autocomplete.recentlyvisited.subtitle" = "Afișează site-urile accesate recent în sugestiile de căutare. Site-urile accesate recent sunt private, stocate doar pe dispozitiv și pot fi șterse cu Fire Button.";
+
+/* Subtitle for Search Suggestions setting */
+"settings.autocomplete.subtitle" = "Afișează sugestii de căutare, inclusiv marcajele tale, pe măsură ce tastezi. Toate căutările sunt private.";
 
 /* Settings screen cell text for Application Lock */
 "settings.autolock" = "Blocarea aplicației";
 
 /* Section footer Autolock description */
-"settings.autolock.description" = "Dacă este setat Touch ID, Face ID sau o parolă de sistem, ți se va solicita să deblochezi aplicația la deschidere.";
+"settings.autolock.description" = "Dacă identificatorul tactil, identificatorul facial sau parola de sistem sunt activate, ți se va solicita să deblochezi aplicația la deschidere.";
+
+/* Settings cell for Browser Feedback */
+"settings.browser.feedback" = "Feedback browser";
 
 /* Settings screen cell text for Automatically Clearing Data */
 "settings.clear.data" = "Șterge automat datele";
+
+/* The name of Settings category in Privacy Features related to configuration of the privacy feature related to cookie pop-ups */
+"settings.cookie.pop-up-protection.protection" = "Protecție pentru ferestre pop-up aferente modulelor cookie";
+
+/* Explanation in Settings how the cookie pop up protection feature works */
+"settings.cookie.pop.up.protection.explanation" = "DuckDuckGo va încerca să selecteze cele mai private setări disponibile și să ascundă aceste ferestre pop-up pentru tine.\n[Află mai multe](ddgQuickLink://duckduckgo.com/duckduckgo-help-pages/privacy/web-tracking-protections/#cookie-pop-up-management)";
 
 /* Settings screen cell text for Cookie popups */
 "settings.cookie.popups" = "Gestionare pop-up-uri pentru module cookie";
@@ -1843,14 +2277,33 @@
 /* Settings title for the customize section */
 "settings.customize" = "Personalizare";
 
-/* Settings screen cell text for setting the app as default browser */
-"settings.default.browser" = "Setare ca browser implicit";
+/* The name of a settings subsection related to the data clearing */
+"settings.data.clearing" = "Ștergerea datelor";
 
-/* Settings cell for Email Protection */
-"settings.emailProtection" = "Protecția comunicațiilor prin e-mail";
+/* Settings screen cell text for setting the app as default browser
+   The name of Settings category in Privacy Features related to configuration of the default browser */
+"settings.default.browser" = "Browser implicit";
+
+/* Label of a button disabling email protection */
+"settings.disable.email.protection.autofill" = "Dezactivează completarea automată în Email Protection";
+
+/* Settings cell to link users to other products by DuckDuckGo */
+"settings.duckduckgo.on.other.platforms" = "DuckDuckGo pe alte platforme";
+
+/* Explanation in Settings how the email protection feature works */
+"settings.email.protection.explanation" = "Blochează tehnologiile de urmărire prin e-mail și ascunde-ți adresa fără a schimba furnizorul de servicii de e-mail.\n[Află mai multe](ddgQuickLink://duckduckgo.com/duckduckgo-help-pages/email-protection/what-is-duckduckgo-email-protection/)";
+
+/* Alert presented to user after clicking on 'Sign out' in Email Protection Settings */
+"settings.email.protection.signing.out.alert" = "Deconectarea din cont tău Email Protection va dezactiva completarea automată a Duck Address în acest browser. Poți utiliza în continuare aceste adrese și poți primi e-mailuri redirecționate ca de obicei.";
 
 /* Settings cell for Email Protection */
 "settings.emailProtection.description" = "Blochează tehnologiile de urmărire prin e-mail și ascunde-ți adresa";
+
+/* Label of a button enabling the email protection feature */
+"settings.enable.email.protection" = "Activează Email Protection";
+
+/* Settings screen cell text for enabling voice search */
+"settings.enable.voice.search" = "Activează căutarea vocală";
 
 /* Settings cell for Feedback */
 "settings.feedback" = "Partajează feedback";
@@ -1861,6 +2314,9 @@
 /* Settings screen cell text for Fireproof Sites */
 "settings.fireproof.sites" = "Site-uri cu ștergerea activității și istoricului din browser la ieșire";
 
+/* The name of the settings subsection containing general settings */
+"settings.general" = "Generale";
+
 /* Settings screen cell text for GPC */
 "settings.gpc" = "Global Privacy Control (GPC)";
 
@@ -1870,14 +2326,41 @@
 /* Settings screen cell for Keyboard */
 "settings.keyboard" = "Tastatură";
 
+/* Switch button label. */
+"settings.let.duckduckgo.manage.cookie.consent.popups" = "Lasă DuckDuckGo să gestioneze ferestrele pop-up de solicitare a consimțământului cu privire la modulele cookie";
+
 /* Settings screen cell text for passwords */
 "settings.logins" = "Parole";
+
+/* The name of the settings section containing main settings */
+"settings.main.settings" = "Setări principale";
+
+/* Label of a button managing email protection account */
+"settings.manage.account" = "Gestionează contul";
 
 /* Settings title for the 'More' section */
 "settings.more" = "Mai multe de la DuckDuckGo";
 
+/* Button navigating to other settings related to search */
+"settings.more.search.settings" = "Mai multe setări de căutare";
+
+/* Subtitle of the 'More Search Settings' button */
+"settings.more.search.settings.explanation" = "Personalizează limba, regiunea și multe altele";
+
+/* The name of a settings category listing next steps */
+"settings.next.steps" = "Pașii următori";
+
+/* Label describing a feature which is turned off */
+"settings.off" = "Dezactivat";
+
+/* Label describing a feature which is turned on */
+"settings.on" = "Activat";
+
 /* Product name for the subscription bundle */
 "settings.ppro" = "Privacy Pro";
+
+/* Title for Link in the Footer of Privacy Pro section */
+"settings.ppro.footer" = "Politica de confidențialitate și Condițiile de prestare a serviciului";
 
 /* Settings screen cell for long press previews */
 "settings.previews" = "Previzualizări prin apăsare lungă";
@@ -1885,11 +2368,77 @@
 /* Settings title for the privacy section */
 "settings.privacy" = "Confidențialitate";
 
+/* The name of Settings category in Privacy Features related to configuration of the search */
+"settings.private.search" = "Căutare Confidențială";
+
+/* Explanation in Settings how the private search feature works */
+"settings.private.search.explanation" = "DuckDuckGo Private Search este motorul tău de căutare implicit, astfel încât poți căuta pe web fără a fi urmărit(ă).";
+
+/* Header of settings related to search */
+"settings.search.settings" = "Setări de căutare";
+
+/* Settings cell for Send Crash Reports */
+"settings.send.crash.reports" = "Trimite rapoarte de cădere";
+
+/* Explanation of Send Crash Reports settings option */
+"settings.send.crash.reports.description" = "Trimite automat rapoarte de cădere către DuckDuckGo.";
+
+/* Settings screen cell text for setting address bar position */
+"settings.set.your.address.bar.position" = "Setează poziția barei de adrese";
+
+/* Privacy pro description subtitle in settings when the is activating */
+"settings.subscription.activating" = "Se activează";
+
+/* Subscription activation pending description */
+"settings.subscription.activation.pending.description" = "Acest lucru durează mai mult decât de obicei, te rugăm să revii mai târziu.";
+
+/* Data Broker protection cell subtitle for privacy pro */
+"settings.subscription.DBP.subtitle" = "Elimină-ți informațiile de pe site-urile care le vând";
+
+/* Data Broker protection cell title for privacy pro */
+"settings.subscription.DBP.title" = "Personal Information Removal";
+
+/* I have a Subscription button text for privacy pro */
+"settings.subscription.existing.subscription" = "Am un abonament";
+
+/* Subscription expired description */
+"settings.subscription.expired.comment" = "Abonează-te din nou pentru a continua să utilizezi Privacy Pro";
+
+/* Subscription expired tittle message */
+"settings.subscription.expired.title" = "Abonamentul tău Privacy Pro a expirat";
+
+/* Identity theft restoration cell subtitle for privacy pro */
+"settings.subscription.ITR.subtitle" = "Dacă identitatea ta este furată, te vom ajuta să o restabilești.";
+
+/* Identity theft restoration cell title for privacy pro */
+"settings.subscription.ITR.title" = "Identity Theft Restoration";
+
+/* Get Privacy Pro button text for privacy pro */
+"settings.subscription.learn.more" = "Obține Privacy Pro";
+
+/* Subscription Settings button text for privacy pro */
+"settings.subscription.manage" = "Setări pentru abonament";
+
+/* Privacy Pro description subtitle in settings */
+"settings.subscription.row.description" = "Include VPN-ul nostru și Identity Theft Restoration.";
+
+/* Call to action title for Privacy Pro settings */
+"settings.subscription.subscribe" = "Protejează-ți conexiunea și identitatea cu Privacy Pro";
+
+/* Privacy pro description subtitle in settings */
+"settings.subscription.us.description" = "Include VPN, Personal Information Removal și Identity Theft Restoration.";
+
+/* VPN cell title for privacy pro */
+"settings.subscription.VPN.title" = "VPN";
+
+/* Label of a button navigating to the Support page */
+"settings.support" = "Asistență";
+
 /* Settings screen cell text for sync and backup */
 "settings.sync" = "Sincronizare și copiere de rezervă";
 
 /* Settings screen cell text for text size */
-"settings.text.size" = "Dimensiune text";
+"settings.text.size" = "Zoom text implicit";
 
 /* Settings screen cell text for theme */
 "settings.theme" = "Temă";
@@ -1905,6 +2454,27 @@
 
 /* Settings screen cell for voice search */
 "settings.voice.search" = "Căutare vocală privată";
+
+/* The name of Settings category in Privacy Features related to configuration of the web tracking protection feature */
+"settings.web.tracking.protection" = "Protecție împotriva urmăririi pe web";
+
+/* Explanation in Settings how the web tracking protection feature works */
+"settings.web.tracking.protection.explanation" = "DuckDuckGo blochează automat tehnologiile de urmărire ascunse în timp ce navighezi pe web.\n[Află mai multe](ddgQuickLink://duckduckgo.com/duckduckgo-help-pages/privacy/web-tracking-protections/)";
+
+/* Description on a report broken site page. */
+"site.not.working.description" = "Selectează opțiunea care descrie cel mai bine problema cu care te-ai confruntat.";
+
+/* Dismiss button */
+"site.not.working.dismiss" = "Renunță";
+
+/* Button that triggers flow to report broken site */
+"site.not.working.report.broken.site" = "Raportați site-ul defect";
+
+/* Prompt asking user to send report to us if we suspect site may be broken */
+"site.not.working.subtitle" = "Acest lucru ne ajută să îmbunătățim browserul.";
+
+/* Prompt asking user to send report to us if we suspect site may be broken */
+"site.not.working.title" = "Site-ul nu funcționează? Anunță DuckDuckGo.";
 
 /* Report a Broken Site screen confirmation button */
 "siteFeedback.buttonText" = "Trimite raportul";
@@ -1924,6 +2494,216 @@
 /* No comment provided by engineer. */
 "siteFeedback.urlPlaceholder" = "Ce site este defect?";
 
+/* No comment provided by engineer. */
+"Stored Hostname: %@" = "Numele gazdă stocat: %@";
+
+/* Button for adding email address to subscription */
+"subscription.activate.add.email.button" = "Adaugă adresa de e-mail";
+
+/* Button text for restoring purchase via Apple ID */
+"subscription.activate.appleid.button" = "Restabilește achiziția";
+
+/* Description for Apple ID activation */
+"subscription.activate.appleid.description" = "Restaurează-ți achiziția pentru a-ți activa abonamentul pe acest dispozitiv.";
+
+/* Button for editing email address added to subscription */
+"subscription.activate.edit.email.button" = "Editează adresa de e-mail";
+
+/* View Title for editing your email account */
+"subscription.activate.edit.email.title" = "Editează adresa de e-mail";
+
+/* Email option for activation */
+"subscription.activate.email" = "E-mail";
+
+/* Restore button title for Email */
+"subscription.activate.email.button" = "Completează adresa de e-mail";
+
+/* Description for Email activation */
+"subscription.activate.email.description" = "Folosește-ți e-mailul pentru a-ți activa abonamentul pe acest dispozitiv.";
+
+/* Activate subscription title */
+"subscription.activate.email.title" = "Activează abonamentul";
+
+/* Button title for cancelling email deletion */
+"subscription.activate.manage.email.cancel" = "Renunță";
+
+/* Button title for confirming email deletion */
+"subscription.activate.manage.email.OK" = "OK";
+
+/* Restore button title for AppleID */
+"subscription.activate.restore.apple" = "Restabilește achiziția";
+
+/* Subscription Activation Title */
+"subscription.activate.title" = "Activează-ți abonamentul pe acest dispozitiv";
+
+/* Resend activation instructions button */
+"subscription.add.device.resend.instructions" = "Retrimite instrucțiunile";
+
+/* Add email to an existing subscription */
+"subscription.add.email" = "Adaugă o adresă de e-mail pentru a-ți activa abonamentul pe celelalte dispozitive ale tale. Vom folosi această adresă doar pentru a-ți verifica abonamentul.";
+
+/* View title for adding email to subscription */
+"subscription.add.email.title" = "Adaugă adresa de e-mail";
+
+/* Text for the manage billing page */
+"subscription.billing.google.text" = "Abonamentul tău a fost achiziționat prin Magazinul Google Play. Pentru a-ți reînnoi abonamentul, deschide setările abonamentului din Magazinului Google Play pe un dispozitiv conectat la același cont Google folosit pentru achiziționarea inițială a abonamentului.";
+
+/* Title for the manage billing page */
+"subscription.billing.google.title" = "Tipuri de abonament";
+
+/* Subscription Removal confirmation message */
+"subscription.cancel.message" = "Abonamentul tău a fost eliminat de pe acest dispozitiv.";
+
+/* Change plan or cancel title */
+"subscription.change.plan" = "Actualizează planul sau anulează";
+
+/* Navigation Button for closing subscription view */
+"subscription.close" = "Închidere";
+
+/* Title for Confirm messages */
+"subscription.confirm.title" = "Sigur?";
+
+/* Header for section for activating subscription on other devices */
+"subscription.devices.header" = "Activează pe alte dispozitive";
+
+/* Footer for section for activating subscription on other devices when email was not yet added */
+"subscription.devices.no.email.footer" = "Adaugă o adresă de e-mail opțională la abonamentul tău pentru a accesa Privacy Pro pe alte dispozitive. **[Află mai multe](https://duckduckgo.com/duckduckgo-help-pages/privacy-pro/adding-email/)**";
+
+/* Footer for section for activating subscription on other devices when email is added */
+"subscription.devices.with.email.footer" = "Folosește această adresă de e-mail pentru a-ți activa abonamentul în Setări > Privacy Pro în aplicația DuckDuckGo pe celelalte dispozitive ale tale. **[Află mai multe](https://duckduckgo.com/duckduckgo-help-pages/privacy-pro/adding-email/)**";
+
+/* Alert content for not found subscription */
+"subscription.email.inactive.alert.message" = "Abonamentul asociat acestei adrese de e-mail nu mai este activ.";
+
+/* Alert title for not found subscription */
+"subscription.email.inactive.alert.title" = "Abonament inexistent";
+
+/* FAQ Button */
+"subscription.faq" = "Întrebări frecvente și asistență";
+
+/* FAQ Description */
+"subscription.faq.description" = "Primește răspunsuri la întrebările frecvente sau contactează asistența Privacy Pro din paginile noastre de ajutor.";
+
+/* Send Feedback Button */
+"subscription.feedback" = "Trimite feedback";
+
+/* Cancel action for the existing subscription dialog */
+"subscription.found.cancel" = "Renunță";
+
+/* Restore action for the existing subscription dialog */
+"subscription.found.restore" = "Restaurează";
+
+/* Title for the existing subscription dialog */
+"subscription.found.title" = "Abonament găsit";
+
+/* Help and support Section header */
+"subscription.help" = "Ajutor și suport";
+
+/* Manage Plan header */
+"subscription.manage.plan" = "Gestionează planul";
+
+/* Header for the subscription section */
+"subscription.manage.title" = "Abonament";
+
+/* Alert title for not found subscription */
+"subscription.notFound.alert.title" = "Abonament inexistent";
+
+/* View plans button text */
+"subscription.notFound.view.plans" = "Vezi planurile";
+
+/* Hero Text for Personal information removal */
+"subscription.pir.hero" = "Activează Privacy Pro pe desktop pentru a configura Personal Information Removal";
+
+/* Description on how to use Personal information removal in desktop. The first placeholder references a location in the Desktop application. <i.e: Settings > Privacy Pro>, and the second, the menu entry. i.e. <I have a Subscription> */
+"subscription.pir.heroText" = "În browserul DuckDuckGo pentru desktop, accesează %1$@ și dă clic pe %2$@ pentru a începe.";
+
+/* Settings references a menu in the Desktop app, Privacy Pro, references our product name */
+"subscription.pir.heroTextLocation" = "Setări > Privacy Pro";
+
+/* Menu item for enabling Personal Information Removal on Desktop */
+"subscription.pir.heroTextMenyEntry" = "Am un abonament";
+
+/* Text for the 'macOS' button */
+"subscription.pir.macos" = "Mac";
+
+/* Text for the 'Windows' button */
+"subscription.pir.windows" = "Windows";
+
+/* Progress view title when completing the purchase */
+"subscription.progress.view.completing.purchase" = "Se finalizează achiziția...";
+
+/* Progress view title when starting the purchase */
+"subscription.progress.view.purchasing.subscription" = "Achiziție în desfășurare...";
+
+/* Progress view title when restoring past subscription purchase */
+"subscription.progress.view.restoring.subscription" = "Se restabilește abonamentul...";
+
+/* Remove from this device button */
+"subscription.remove.from.device.button" = "Elimină de pe acest dispozitiv";
+
+/* Remove from device confirmation dialog text */
+"subscription.remove.from.device.text" = "Nu vei mai putea-ți să accesezi abonamentul Privacy Pro de pe acest dispozitiv. Acest lucru nu îți va anula abonamentul, care va rămâne activ pe celelalte dispozitive.";
+
+/* Remove from device confirmation dialog title */
+"subscription.remove.from.device.title" = "Dorești să elimini de pe acest dispozitiv?";
+
+/* Remove subscription button text */
+"subscription.remove.subscription" = "Elimină abonamentul";
+
+/* Remove subscription cancel button text */
+"subscription.remove.subscription.cancel" = "Renunță";
+
+/* Button text for general error message */
+"subscription.restore.backend.error.button" = "Înapoi la Setări";
+
+/* Alert for general error message */
+"subscription.restore.backend.error.message" = "Întâmpinăm probleme la conectare. Încearcă din nou mai târziu.";
+
+/* Alert for general error title */
+"subscription.restore.backend.error.title" = "Ceva nu a funcționat corect";
+
+/* Alert for general error message */
+"subscription.restore.general.error.message" = "Magazinul de aplicații nu a putut prelucra achiziția ta. Încearcă din nou mai târziu.";
+
+/* Alert for general error title */
+"subscription.restore.general.error.title" = "Ceva nu a funcționat corect";
+
+/* Alert button text for restored purchase alert */
+"subscription.restore.success.alert.button" = "OK";
+
+/* Alert message for restored purchase */
+"subscription.restore.success.alert.message" = "Achizițiile tale au fost restaurate.";
+
+/* Alert title for restored purchase */
+"subscription.restore.success.alert.title" = "Ești gata.";
+
+/* Subtitle in header when subscribed */
+"subscription.subscribed" = "Abonat";
+
+/* Subscription Expired Data. This reads as 'Your subscription expired on (date)' */
+"subscription.subscription.expired.caption" = "Abonamentul tău a expirat la data de %@";
+
+/* Monthly subscription expiration info where parameter is expiration date. This reads as 'Your monthly subscription expires on (date)' */
+"subscription.subscription.expiring.monthly.caption" = "Abonamentul tău lunar expiră la data de %@.";
+
+/* Unknown period subscription expiration info where parameter is expiration date. This reads as 'Your subscription expires on (date)' */
+"subscription.subscription.expiring.unknown.caption" = "Abonamentul tău expiră la data de %@.";
+
+/* Annual subscription expiration info where parameter is expiration date. This reads as 'Your annual subscription expires on (date)' */
+"subscription.subscription.expiring.yearly.caption" = "Abonamentul tău anual expiră la data de %@.";
+
+/* Monthly subscription renewal info where parameter is renewal date. This reads as 'Your monthly subscription renews on (date)' */
+"subscription.subscription.renewing.monthly.caption" = "Abonamentul tău lunar se reînnoiește la data de %@.";
+
+/* Unknown period subscription renewal info where parameter is renewal date. This reads as 'Your subscription renews on (date)' */
+"subscription.subscription.renewing.unknown.caption" = "Abonamentul tău se reînnoiește la data de %@.";
+
+/* Annual subscription renewal info where parameter is renewal date. This reads as 'Your annual subscription renews on (date)' */
+"subscription.subscription.renewing.yearly.caption" = "Abonamentul tău anual se reînnoiește la data de %@.";
+
+/* Navigation bar Title for subscriptions */
+"subscription.title" = "Privacy Pro";
+
 /* Message confirming that recovery code was copied to clipboard */
 "sync.code.copied" = "Codul de recuperare a fost copiat în clipboard";
 
@@ -1935,6 +2715,24 @@
 
 /* Title of the dialog to confirm deleting Sync server data */
 "sync.delete.all.confirm.title" = "Ștergi datele serverului?";
+
+/* Message for the Sync Promotion banner when user has bookmarks that can be synced */
+"sync.promo.bookmarks.message" = "Nu este nevoie să ai un cont. Criptarea de la un punct la altul (end-to-end) înseamnă că nimeni în afară de tine nu îți poate vedea marcajele, nici măcar noi.";
+
+/* Title for the Sync Promotion banner */
+"sync.promo.bookmarks.title" = "Sincronizează și creează copii de rezervă pentru marcajele tale";
+
+/* Title for a button in the Sync Promotion banner to set up Sync */
+"sync.promo.confirm.action" = "Configurează sincronizarea";
+
+/* Title for a button in the Sync Promotion banner to dismiss Sync promotion banner */
+"sync.promo.dismiss.action" = "Nu, mulțumesc";
+
+/* Message for the Sync Promotion banner when user has passwords that can be synced */
+"sync.promo.passwords.message" = "Nu este nevoie să ai un cont. Criptarea end-to-end înseamnă că nimeni în afară de tine nu îți poate vedea parolele, nici măcar noi.";
+
+/* Title for the Sync Promotion banner */
+"sync.promo.passwords.title" = "Sincronizează și creează copii de rezervă pentru parolele tale";
 
 /* Caption for a button to remove device from Sync */
 "sync.remove-device.action" = "Elimină";
@@ -1954,14 +2752,14 @@
 /* Title of the dialog to confirm turning off Sync */
 "sync.turn.off.confirm.title" = "Oprești sincronizarea?";
 
+/* Reason for auth when setting up Sync */
+"sync.user.auth.reason" = "Deblochează dispozitivul pentru a configura Sync & Backup";
+
 /* Data syncing unavailable warning message */
 "sync.warning.data.syncing.disabled" = "Ne pare rău, dar Sincronizarea și copierea de rezervă nu este disponibilă momentan. Încearcă din nou mai târziu.";
 
 /* Data syncing unavailable warning message */
 "sync.warning.data.syncing.disabled.upgrade.required" = "Ne pare rău, dar Sincronizarea și copierea de rezervă nu mai este disponibilă în această versiune de aplicație. Te rugăm să actualizezi DuckDuckGo la cea mai recentă versiune pentru a continua.";
-
-/* Title of the warning message */
-"sync.warning.sync.paused" = "Sincronizarea și copierea de rezervă este întreruptă";
 
 /* Accessibility label on remove button */
 "tab.close.home" = "Închide fila de pornire";
@@ -1979,7 +2777,7 @@
 "tab.switcher.accessibility.label" = "Comutator între file";
 
 /* Description text for the text size adjustment setting */
-"textSize.description" = "Alege dimensiunea preferată a textului. Site-urile pe care le vizitezi în DuckDuckGo se vor adapta la aceasta.";
+"textSize.description" = "Mărește sau micșorează dimensiunea textului pe toate site-urile.";
 
 /* Replacement string is a current percent value e.g. '120%' */
 "textSize.footer" = "Dimensiune text - %@";
@@ -2002,8 +2800,14 @@
 /* Light Theme entry */
 "theme.name.light" = "Lumină";
 
+/* No comment provided by engineer. */
+"This list contains messages that have been shown plus at most 1 message that is scheduled for showing. There may be more messages in the config that will be presented, but they haven't been processed yet." = "Această listă conține mesaje care au fost afișate plus cel mult 1 mesaj programat pentru afișare. Este posibil să existe mai multe mesaje în configurare care vor fi prezentate, dar acestea nu au fost încă prelucrate.";
+
 /* Confirmation of an action - populated with a domain name */
 "toast.protection.disabled" = "Protecția confidențialității este dezactivată pentru %@";
+
+/* Confirmation of an action - populated with a domain name */
+"toast.protection.disabled.and.toggle.report.sent" = "Protecțiile confidențialității sunt dezactivate pentru %@ și raportul a fost trimis.";
 
 /* Confirmation of an action - populated with a domain name */
 "toast.protection.enabled" = "Protecția confidențialității este activată pentru %@";
@@ -2036,7 +2840,151 @@
 "voiceSearch.cancel" = "Renunță";
 
 /* Voice-search footer note with on-device privacy warning */
-"voiceSearch.footer.note" = "Componenta audio este prelucrată pe dispozitiv. Nu este stocată sau distribuită nimănui, nici DuckDuckGo.";
+"voiceSearch.footer.note" = "Adaugă opțiunea de Căutare vocală privată în bara de adrese.Sunetul nu este stocat sau partajat cu nimeni, inclusiv cu DuckDuckGo.";
+
+/* Voice-search footer note with on-device privacy warning */
+"voiceSearch.footer.note.old" = "Componenta audio este prelucrată pe dispozitiv. Nu este stocată sau distribuită nimănui, nici DuckDuckGo.";
+
+/* Cancel action for the alert when the subscription expires */
+"vpn.access-revoked.alert.action.cancel" = "Renunță";
+
+/* Primary action for the alert when the subscription expires */
+"vpn.access-revoked.alert.action.subscribe" = "Înscrie-te";
+
+/* Alert message for the alert when the Privacy Pro subscription expiress */
+"vpn.access-revoked.alert.message" = "Abonează-te la Privacy Pro pentru a reconecta DuckDuckGo VPN.";
+
+/* Alert title for the alert when the Privacy Pro subscription expires */
+"vpn.access-revoked.alert.title" = "VPN-ul s-a deconectat din cauza unui abonament expirat";
+
+/* Title for the VPN widget onboarding screen */
+"vpn.addWidget.settings.title" = "Găsește și selectează **DuckDuckGo**, apoi glisează la **VPN** și selectează **Adaugă widget**.";
+
+/* Message for success when running the intent to enable the DuckDuckGo VPN */
+"vpn.control-widget.disable.vpn.intent.success" = "DuckDuckGo VPN este conectat.";
+
+/* No comment provided by engineer. */
+"vpn.control-widget.education.screen.description" = "Comenzile rapide Siri îți permit să te conectezi la VPN cu o comandă vocală rapidă, cum ar fi „Siri, pornește DuckDuckGo VPN”. Este o modalitate rapidă, fără mâini, de a-ți folosi VPN-ul.";
+
+/* Siri commands education screen: example 1 */
+"vpn.control-widget.education.screen.example1" = "Siri, pornește DuckDuckGo VPN.";
+
+/* Siri commands education screen: example 2 */
+"vpn.control-widget.education.screen.example2" = "Siri, activează VPN-ul DuckDuckGo.";
+
+/* Siri commands education screen: example 3 */
+"vpn.control-widget.education.screen.example3" = "Siri, protejează-mi dispozitivul cu DuckDuckGo.";
+
+/* Title for the VPN Control Widget education screen title */
+"vpn.control-widget.education.screen.title" = "Controlează VPN-ul DuckDuckGo cu Siri!";
+
+/* Message for success when running the intent to enable the DuckDuckGo VPN */
+"vpn.control-widget.enable.vpn.intent.success" = "DuckDuckGo VPN este conectat.";
+
+/* Title for the Cancel button of the VPN feedback form */
+"vpn.feedback-form.button.cancel" = "Renunță";
+
+/* Title for the Done button of the VPN feedback form */
+"vpn.feedback-form.button.done" = "Terminat";
+
+/* Title for the Submit button of the VPN feedback form */
+"vpn.feedback-form.button.submit" = "Trimite";
+
+/* Title for the Submitting state of the VPN feedback form */
+"vpn.feedback-form.button.submitting" = "Se transmite...";
+
+/* Title for the browser crash/freeze category of the VPN feedback form */
+"vpn.feedback-form.category.browser-crash-or-freeze" = "VPN face ca browserul să se închidă sau să se blocheze";
+
+/* Title for the 'VPN fails to connect' category of the VPN feedback form */
+"vpn.feedback-form.category.fails-to-connect" = "VPN nu reușește să se conecteze";
+
+/* Title for the 'VPN feature request' category of the VPN feedback form */
+"vpn.feedback-form.category.feature-request" = "Solicitare de funcționalitate VPN";
+
+/* Title for the category 'VPN causes issues with other apps or websites' category of the VPN feedback form */
+"vpn.feedback-form.category.issues-with-apps" = "VPN cauzează probleme cu alte aplicații sau site-uri";
+
+/* Title for the local device connectivity category of the VPN feedback form */
+"vpn.feedback-form.category.local-device-connectivity" = "VPN nu mă lasă să mă conectez la dispozitivul local";
+
+/* Title for the 'other VPN feedback' category of the VPN feedback form */
+"vpn.feedback-form.category.other" = "Alt feedback despre VPN";
+
+/* Title for the category selection state of the VPN feedback form */
+"vpn.feedback-form.category.select-category" = "SELECTEAZĂ O CATEGORIE";
+
+/* Title for the 'VPN is too slow' category of the VPN feedback form */
+"vpn.feedback-form.category.too-slow" = "Conexiunea VPN este prea lentă";
+
+/* Title for the 'unable to install' category of the VPN feedback form */
+"vpn.feedback-form.category.unable-to-install" = "Nu pot instala VPN";
+
+/* Title for the feedback sent view description of the VPN feedback form */
+"vpn.feedback-form.sending-confirmation.description" = "Feedbackul tău ne va ajuta să îmbunătățim\nDuckDuckGo VPN.";
+
+/* Title for the feedback sending error text of the VPN feedback form */
+"vpn.feedback-form.sending-confirmation.error" = "Nu am putut trimite feedbackul tău acum, încearcă din nou.";
+
+/* Title for the feedback sent view title of the VPN feedback form */
+"vpn.feedback-form.sending-confirmation.title" = "Mulțumim!";
+
+/* Toast message when the VPN feedback form is submitted successfully */
+"vpn.feedback-form.submitted.message" = "Mulțumesc! Feedback trimis.";
+
+/* Text for the body of the VPN feedback form */
+"vpn.feedback-form.text-1" = "Descrie ce se întâmplă, ce te așteptai să se întâmple și pașii care au dus la apariția problemei:";
+
+/* Text for the body of the VPN feedback form */
+"vpn.feedback-form.text-2" = "Pe lângă detaliile introduse în acest formular, raportul privind problemele aplicației tale va conține:";
+
+/* Bullet text for the body of the VPN feedback form */
+"vpn.feedback-form.text-3" = "• Dacă funcțiile specifice DuckDuckGo sunt activate";
+
+/* Bullet text for the body of the VPN feedback form */
+"vpn.feedback-form.text-4" = "• Diagnosticare agregată a aplicației DuckDuckGo";
+
+/* Text for the body of the VPN feedback form */
+"vpn.feedback-form.text-5" = "Atingând „Transmite”, sunt de acord ca DuckDuckGo să utilizeze informațiile din acest raport în scopul îmbunătățirii funcțiilor aplicației.";
+
+/* Title for each screen of the VPN feedback form */
+"vpn.feedback-form.title" = "Contribuie la îmbunătățirea DuckDuckGo VPN";
+
+/* VPN settings screen cell text for adding the VPN widget to the control center */
+"vpn.settings.add.control-center.widget" = "Adaugă VPN la Centrul de control";
+
+/* VPN settings screen cell text for adding the VPN widget to the home screen */
+"vpn.settings.add.widget" = "Adaugă un widget VPN la ecranul de întâmpinare";
+
+/* VPN settings screen cell text to learn how to control the VPN with Siri */
+"vpn.settings.control.with.siri" = "Controlează VPN-ul cu Siri";
+
+/* Disclaimer for the DNS Server section on the DNS Server screen */
+"vpn.settings.dns.section-disclaimer" = "Folosirea unui server DNS personalizat poate afecta viteza de navigare și îți poate expune activitatea unor terțe părți, dacă serverul nu este sigur sau de încredere.";
+
+/* Header text for the DNS section on the VPN Settings screen */
+"vpn.settings.dns.section-header" = "DNS";
+
+/* Title for the Apply button on the DNS Server setting screen */
+"vpn.settings.dns.server.apply.button.title" = "Aplică";
+
+/* Default value for the DNS Server row on the VPN Settings screen */
+"vpn.settings.dns.server.default.value" = "DuckDuckGo";
+
+/* Title for the IPv4 Address setting */
+"vpn.settings.dns.server.ipv4.title" = "Adresa IPv4";
+
+/* Custom option for the DNS Server setting */
+"vpn.settings.dns.server.option.custom" = "Personalizat";
+
+/* Recommended option for the DNS Server setting */
+"vpn.settings.dns.server.option.default" = "DuckDuckGo (Recomandat)";
+
+/* Title for the DNS Server setting screen */
+"vpn.settings.dns.server.screen.title" = "Server DNS";
+
+/* Title for the DNS Server row on the VPN Settings screen */
+"vpn.settings.dns.server.title" = "Server DNS";
 
 /* Title for the button to enable push notifications in system settings */
 "waitlist.allow-notifications" = "Permite notificările";
@@ -2116,38 +3064,11 @@
 /* No comment provided by engineer. */
 "Welcome to the Duck Side!" = "Welcome to the Duck Side!";
 
-/* Title for the Windows waitlist notification */
-"windows-waitlist.available.notification.title" = "Încearcă DuckDuckGo pentru Windows!";
-
-/* Description on the invite screen */
-"windows-waitlist.invite-screen.step-1.description" = "Accesează această adresă URL pe dispozitivul tău Windows pentru a descărca:";
-
-/* Description on the invite screen */
-"windows-waitlist.invite-screen.step-2.description" = "Deschide programul de instalare DuckDuckGo în Descărcări, selectează Instalează, apoi completează codul de invitație.";
-
-/* Subtitle for the Windows Waitlist Invite screen */
-"windows-waitlist.invite-screen.subtitle" = "Ești gata să folosești DuckDuckGo pe Windows?";
-
 /* Title for the Windows waitlist button redirecting to Mac waitlist */
 "windows-waitlist.join-waitlist-screen.mac-waitlist" = "Cauți versiunea pentru Mac?";
 
-/* Title for the Join Windows Waitlist screen */
-"windows-waitlist.join-waitlist-screen.try-duckduckgo-for-windows" = "Beneficiază de acces timpuriu pentru a încerca DuckDuckGo pentru Windows!";
-
-/* Message for the alert to confirm enabling notifications */
-"windows-waitlist.joined.no-notification.get-notification-confirmation-message" = "Îți vom trimite o notificare atunci când copia ta DuckDuckGo pentru Windows este gata pentru descărcare. ";
-
-/* Label text for the Joined Waitlist state with notifications declined */
-"windows-waitlist.joined.notifications-declined" = "Invitația ta de a încerca DuckDuckGo pentru Windows va sosi aici. Revino în curând sau îți putem trimite o notificare când este rândul tău.";
-
-/* Label text for the Joined Waitlist state with notifications enabled */
-"windows-waitlist.joined.notifications-enabled" = "Îți vom trimite o notificare atunci când copia ta DuckDuckGo pentru Windows este gata pentru descărcare.";
-
 /* Title for the settings subtitle */
 "windows-waitlist.settings.browse-privately" = "Navighează în mod privat cu aplicația noastră pentru Windows";
-
-/* Message used when sharing to iMessage. Parameter is an eight digit invite code. */
-"windows-waitlist.share-sheet.invite-code-message" = "Ești invitat!\n\nEști gata să folosești DuckDuckGo pe Windows?\n\nPasul 1\nAccesează această adresă URL pe dispozitivul tău Windows pentru a descărca:\nhttps://duckduckgo.com/windows\n\nPasul 2\nDeschide programul de instalare DuckDuckGo în Descărcări, selectează Instalează, apoi completează codul de invitație.\n\nCod de invitație: %@";
 
 /* Message used when sharing to iMessage */
 "windows-waitlist.share-sheet.message" = "Ești gata să începi să navighezi în mod privat folosind Windows?\n\nVizitează această adresă URL pe computerul tău Windows pentru a descărca:\nhttps://duckduckgo.com/windows";
